@@ -10,8 +10,11 @@ use App\Http\Controllers\EmpresasControlador;
 use App\Http\Controllers\PDFControlador;
 use App\Http\Controllers\PagosControlador;
 use App\Http\Controllers\ResolucionesControlador;
-use App\Http\Controllers\UbigeoController;
+use App\Http\Controllers\DistritoController;
 use App\Http\Controllers\Controller;
+use App\Models\District;
+use App\Models\Province;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -91,5 +94,5 @@ Route::middleware([
             Route::get('/conductores/{id}', [Controller::class, 'conductor']);
             Route::get('/placas/{id}', [Controller::class, 'placas']);
 
-            Route::get('/get-districts/{id}', [UbigeoController::class, 'getDistricts'])->name('get-districts');
+            Route::get('/provincias/{id}/distritos', [DistritoController::class, 'getDistritos']);
 });

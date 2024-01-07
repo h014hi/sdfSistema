@@ -8,7 +8,7 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-12 lg:px-10"> <!-- This is the container -->
-            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg" style="padding: 10px; ">
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
                 <x-z04_tabla_operativos :resultados="$resultados" :provinces="$provinces" :districts="$districts"/>
             </div>
         </div>

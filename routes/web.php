@@ -12,8 +12,9 @@ use App\Http\Controllers\PagosControlador;
 use App\Http\Controllers\ResolucionesControlador;
 use App\Http\Controllers\DistritoController;
 use App\Http\Controllers\Controller;
-use App\Models\District;
-use App\Models\Province;
+use App\Http\Controllers\InfraIncumController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -95,4 +96,6 @@ Route::middleware([
             Route::get('/placas/{id}', [Controller::class, 'placas']);
 
             Route::get('/provincias/{id}/distritos', [DistritoController::class, 'getDistritos']);
+            Route::get('/infra/{id}', [InfraIncumController::class, 'getInfracciones']);
+            Route::get('/incum/{id}', [InfraIncumController::class, 'getIncumplimientos']);
 });

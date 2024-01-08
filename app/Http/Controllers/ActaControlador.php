@@ -11,9 +11,9 @@ use App\Models\Pago;
 use App\Models\Infraccion;
 use App\Models\Operativo;
 use App\Models\Vehiculo;
-
-
-
+use App\Models\Infra_Incum;
+use App\Models\Incumplimiento;
+use App\Models\Infraccions;
 
 class ActaControlador extends Controller
 {
@@ -201,7 +201,17 @@ class ActaControlador extends Controller
         $nuevo_acta->ruta= $request->input('ruta');
         $nuevo_acta->inspector_id =  $request->input('inspector');
         $nuevo_acta->empresa_id = $request->input('empresas');
-        $nuevo_acta->infraccion_id = $request->input('infraccion');
+
+        $nuevo_infra_incum = new Infra_Incum;
+        $nuevo_infra_incum->tipo = $request->input('seleccion');
+        $nuevo_infra_incum->infracion_id = $request->input('infraccion');
+        $nuevo_infra_incum->infra_id = $request->input('infra_sub');
+        $nuevo_infra_incum->incumplimiento_id = $request->input('incumplimiento');
+        $nuevo_infra_incum->incum_id = $request->input('incum_sub');
+        $nuevo_infra_incum->save();
+
+        $nuevo_acta->infra_incum()->associate($nuevo_infra_incum);
+
         $nuevo_acta->save();
         return redirect()->back();
     }
@@ -262,7 +272,20 @@ class ActaControlador extends Controller
         $vehiculos = Vehiculo::all();
         $pagos = Pago::all();
         $actas = Acta::where('operativo_id', $id)->orderBy('updated_at', 'desc')->paginate(5);
-        return view('actas', ['resultados'=>$actas, 'inspectores'=>$inspectores, 'empresas'=>$empresas, 'conductores'=>$conductores, 'infracciones'=>$infracciones, 'vehiculos'=>$vehiculos, 'pagos'=>$pagos, 'id'=>$id]);
+        $infra = Infraccions::all();
+        $incum = Incumplimiento::all();
+
+        return view('actas', [
+            'resultados'=>$actas,
+            'inspectores'=>$inspectores,
+            'empresas'=>$empresas,
+            'conductores'=>$conductores,
+            'infra'=>$infra,
+            'incum'=>$incum,
+            'infracciones'=>$infracciones,
+            'vehiculos'=>$vehiculos,
+            'pagos'=>$pagos,
+            'id'=>$id]);
     }
 
     // ActaControlador.php

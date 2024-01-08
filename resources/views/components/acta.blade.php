@@ -97,7 +97,6 @@
                 <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-
 <div class="modal-body" style="padding: 40px;">
 <form id="formulario" action="{{ route('guardar.actas', ['id' => $id]) }}" method="GET">
 
@@ -166,15 +165,58 @@
             <div class="space-x-3 flex justify-between">
 
             <div class="flex-1 space-y-3 small_container">
-                <label for="">Codigo de Infracción:</label>
-                <select name="infraccion" value="" id="" required
-                class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:focus:border-blue-500">
-                <option value="" disabled selected>Seleccione</option>
-                @foreach ($infracciones as $item)
-                    <option value= "{{$item->id}}">{{ $item->codigo}}</option>
-                @endforeach
+                <label for="">Seleccione:</label>
+                <select name="seleccion" id="seleccion" onchange="toggleFields(this)"
+                    class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-24 p-2.5 dark:focus:border-blue-500">
+                    <option value="">Seleccione</option>
+                    <option value="infraccion">Infracción</option>
+                    <option value="incumplimiento">Incumplimiento</option>
                 </select>
             </div>
+
+            <!-- Campos de Infracción -->
+            <div id="infraccionFields" style="display: none;">
+                <div class="flex-1 space-y-3 small_container">
+                    <label for="">Infracción:</label>
+                    <select name="infraccion" id="infraccion" onchange="loadSubCodigo(this, 'infraccion')"
+                        class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:focus:border-blue-500">
+                        <option value="" selected disabled>Seleccione</option>
+                        @foreach ($infra as $item)
+                            <option value="{{$item->id}}">{{$item->codigo}}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="flex-1 space-y-3 small_container">
+                    <label for="">SubCódigo:</label>
+                    <select id="infra_sub" name="infra_sub" class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:focus:border-blue-500">
+                        <option value="Null" selected disabled>Seleccione</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Campos de Incumplimiento -->
+            <div id="incumplimientoFields" style="display: none;">
+                <div class="flex-1 space-y-3 small_container">
+                    <label for="">Incumplimiento:</label>
+                    <select name="incumplimiento" id="incumplimiento" onchange="loadSubCodigo(this, 'incumplimiento')"
+                        class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:focus:border-blue-500">
+                        <option value="" selected disabled>Seleccione</option>
+                        @foreach ($incum as $item)
+                            <option value="{{$item->id}}">{{$item->codigo}}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="flex-1 space-y-3 small_container">
+                    <label for="">Articulo:</label>
+                    <select id="incum_sub" name="incum_sub" class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:focus:border-blue-500">
+                        <option value="Null" selected disabled>Seleccione</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-------------------------------------------------------------->
 
             <div class="flex-1 space-y-3 small_container">
                     <label for="">Retencion de documentos:</label>
@@ -401,3 +443,71 @@
         margin-right: 10px;
     }
 </style>
+
+<script>
+    var tempo;
+    function toggleFields(select) {
+        var selectedValue = select.value;
+        // Mostrar u ocultar campos según la selección
+        var infraccionFields = document.getElementById('infraccionFields');
+        var incumplimientoFields = document.getElementById('incumplimientoFields');
+
+        if (selectedValue === 'infraccion') {
+            infraccionFields.style.display = 'block';
+            incumplimientoFields.style.display = 'none';
+            tempo = 'infra';
+        } else if (selectedValue === 'incumplimiento') {
+            infraccionFields.style.display = 'none';
+            incumplimientoFields.style.display = 'block';
+            tempo = 'incum';
+        } else {
+            // En caso de que no se haya seleccionado nada
+            infraccionFields.style.display = 'none';
+            incumplimientoFields.style.display = 'none';
+            tempo='none'
+        }
+    }
+
+    // Select Anidado
+    function loadSubCodigo(codigo, tipo) {
+        let codigoId = codigo.value;
+        let temproute = (tipo === 'infraccion') ? 'infra' : 'incum';
+
+        fetch('/' + temproute + '/' + codigoId)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (jsonData) {
+                buildSelectInfra_incum(jsonData, tipo);
+            });
+    }
+
+    function buildSelectInfra_incum(infra_incums, tipo) {
+        let subId = (tipo === 'infraccion') ? 'infra_sub' : 'incum_sub';
+        let infra_incumSelect = document.getElementById(subId);
+
+        clearSelect(infra_incumSelect);
+
+
+        infra_incums.forEach(function (infra_incum) {
+
+
+            let optiontag = document.createElement('option');
+            optiontag.value = infra_incum.id;
+
+            if (tipo === 'infraccion') {
+                optiontag.innerHTML = infra_incum.sub_cod;
+            } else {
+                optiontag.innerHTML = infra_incum.articulo;
+            }
+
+            infra_incumSelect.append(optiontag);
+        });
+    }
+
+    function clearSelect(select){
+        while(select.options.length > 1){
+            select.remove(1);
+        }
+    }
+</script>

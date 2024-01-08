@@ -286,6 +286,7 @@
     //Select Anidado
     function loadDistritos(provinciaSelect) {
         let provinciaId = provinciaSelect.options[provinciaSelect.selectedIndex].id;
+        console.log(provinciaId);
         fetch('provincias/' + provinciaId + '/distritos')
             .then(function (response) {
                 return response.json();

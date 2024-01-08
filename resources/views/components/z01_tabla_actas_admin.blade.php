@@ -90,10 +90,7 @@
             <label for="">Codigo de Infracción:</label>
             <select name="infraccion" value="" id="infraccionedit"
                 class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:focus:border-blue-500">
-                <option value="">Seleccione</option>
-                @foreach ($infracciones as $item)
-                    <option value= "{{$item->id}}">{{ $item->codigo}}</option>
-                @endforeach
+
             </select>
         </div>
 
@@ -289,7 +286,14 @@
                         <td>{{$acta->conductor->nombres}}</td>
                         <td>{{$acta->conductor->licencia}} - {{$acta->conductor->categoria}} / {{$acta->conductor->estadolicencia}}</td>
                         <td>{{$acta->inspector->nombres}}{{$acta->inspector->apellidos}}</td>
-                        <td>{{$acta->infraccion->codigo}}</td>
+                        @if ($acta->infra_incum->tipo === 'infraccion')
+                            <td>{{$acta->infra_incum->infraccion->infraccionPadre->codigo}}{{$acta->infra_incum->infraccion->sub_cod}}</td>
+                        @elseif ($acta->infra_incum->tipo === 'incumplimiento')
+                            <td>{{$acta->infra_incum->incumplimiento->IncumplimientoPadre->codigo}}</td>
+                        @else
+                            <td>No hay</td>
+                        @endif
+
                         <td>{{$acta->retencion}}</td>
                         <td>
                             <div>
@@ -341,7 +345,7 @@
                         @if($acta->estado == "CONDESCARGO")
                             <td>  <div style="color: white; background-color: #3ac7f1; padding: 1em;"><b>Pendiente de tramite (con descargo)</b></div></td>
                         @else
-                        @if($acta->infraccion->tipo == "INFRACCION")
+                        @if($acta == "INFRACCION")
                             @if($fechaHoy > $nuevaFecha)
                             <td><div style="color: white; background-color: #f53838; padding: 1em;"><b>Para su Tramite</b></div></td>
                             @else
@@ -369,7 +373,6 @@
                                             {{json_encode($acta->numero)}},
                                             {{json_encode($acta->estado)}},
                                             {{json_encode($acta->inspector->id)}},
-                                            {{json_encode($acta->infraccion->id)}},
                                             {{json_encode($acta->retencion)}},
                                             {{json_encode($acta->conductor->dni)}},
                                             {{json_encode($acta->conductor->nombres)}},

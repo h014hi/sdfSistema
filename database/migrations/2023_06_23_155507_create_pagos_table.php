@@ -17,6 +17,7 @@ return new class extends Migration
             $table->date('fecha')->nullable(false);
             $table->float('monto')->nullable(false);
             $table->integer('codigo')->nullable(true);
+
             // relación con operativos
             $table->unsignedBigInteger('acta_id')->nullable();
             $table->foreign('acta_id')->references('id')->on('actas')->onDelete('set null');

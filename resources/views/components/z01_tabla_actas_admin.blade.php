@@ -1,5 +1,19 @@
 @props(['resultados','inspectores','empresas','conductores','infracciones','vehiculos','pagos'])
 
+<style>
+    .formatted-info {
+        text-align: center;
+        font-size: 1.25rem;
+
+        margin-bottom: 5px;
+    }
+
+    .highlight {
+        font-weight: bold;
+        color: #e74c3c; /* Change the color to your preferred highlight color */
+    }
+</style>
+
 <!-- Modal -->
 <div class="modal fade" id="ActaEdit" tabindex="-1" role="dialog" >
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-dialog-custom modal-lg" role="document">
@@ -252,18 +266,29 @@
 @endphp
 
         <!--CUERPO-->
+        @php
+            use Carbon\Carbon;
+            $ope = $resultados[0]->operativo;
+            $fechaFormateada = Carbon::parse($ope->fecha)->locale('es')->isoFormat('LL');
+        @endphp
+
+        <h2 class="formatted-info">
+            Operativo <span class="highlight">{{$ope->tipo}}</span> llevado a cabo el <span class="highlight">{{$fechaFormateada}}</span>
+            en el lugar denominado: <span class="highlight">{{$ope->lugar}}</span> del distrito de:
+            <span class="highlight">{{$ope->distrito}}</span>, provincia de: <span class="highlight">{{$ope->provincia}}</span>.
+        </h2>
+
         <tbody>
                 @foreach($resultados as $index => $acta)
                         <tr>
                         <td>{{$index + 1 }}</td>
                         <td>{{$acta->numero}}</td>
-                        <td>{{$acta->operativo->fecha}}</td>
-                        <td>{{$acta->operativo->lugar}}</td>
                         <td>{{$acta->empresa->razon_social}}</td>
                         <td>{{$acta->vehiculo->placa}}</td>
                         <td>{{$acta->ruta}}</td>
                         <td>{{$acta->conductor->nombres}}</td>
                         <td>{{$acta->conductor->licencia}} - {{$acta->conductor->categoria}} / {{$acta->conductor->estadolicencia}}</td>
+                        <td>{{$acta->inspector->nombres}}{{$acta->inspector->apellidos}}</td>
                         <td>{{$acta->infraccion->codigo}}</td>
                         <td>{{$acta->retencion}}</td>
                         <td>
@@ -363,13 +388,14 @@
                                         </svg>
                                         </a>
 
-                                        <a href="{{ route('ifi', ['id' => json_encode($acta->id)]) }}" class="btn btn-success position-relative">
+                                        <!-- <a href="{{ route('ifi', ['id' => json_encode($acta->id)]) }}" class="btn btn-success position-relative">
                                             + IFI
-                                        </a>
+                                        </a>-->
+                                        <a href="" class="btn btn-success position-relative" data-toggle="modal" data-target="#ActaEdit">IFI</a>
                                         <form action="{{ route('acta.destroy', ['id' => $acta->id]) }}" method="POST" class="btn btn-danger d-inline" >
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit"  onclick="return confirm('Are you sure you want to delete this acta?')">
+                                            <button type="submit"  onclick="return confirm('Esta seguro de eliminar esta acta?')">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash3" viewBox="0 0 16 16">
                                                     <path d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5ZM11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H2.506a.58.58 0 0 0-.01 0H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1h-.995a.59.59 0 0 0-.01 0H11Zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5h9.916Zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47ZM8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5Z"/>
                                                 </svg>

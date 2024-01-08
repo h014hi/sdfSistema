@@ -161,12 +161,11 @@
         </div>
 
         <div class="space-y-3 mb-4">
-            <h2 class="font-bold">DATOS DE LA INFRACCIÓN</h2>
+            <h2 class="font-bold">DATOS DE LA INFRACCIÓN/INCUMPLIMIENTO</h2>
             <hr style="border-top: 2px solid #000;">
             <div class="space-x-3 flex justify-between">
 
             <div class="flex-1 space-y-3 small_container">
-                <!-- Falta poner por defecto I7c -->
                 <label for="">Codigo de Infracción:</label>
                 <select name="infraccion" value="" id="" required
                 class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:focus:border-blue-500">
@@ -356,6 +355,7 @@
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" style="background-color: #187BEC;">
          Registrar Acta
         </button>
+
   </div>
 </div>
 <br>
@@ -367,13 +367,12 @@
                     <tr>
                         <th scope="col">ITEM</th>
                         <th scope="col">N° DE ACTA</th>
-                        <th scope="col">FECHA DE INSPECCIÓN</th>
-                        <th scope="col">LUGAR DE INTERVENCIÓN</th>
                         <th scope="col">RAZON SOCIAL</th>
                         <th scope="col">N° DE PLACA</th>
                         <th scope="col">RUTA</th>
                         <th scope="col">NOMBRE DEL CONDUCTOR</th>
                         <th scope="col">LICENCIA / ESTADO</th>
+                        <th scope="col">INSPECTOR</th>
                         <th scope="col">FALTA</th>
                         <th scope="col">RETENCION</th>
                         <th scope="col">OBSERVACIONES</th>

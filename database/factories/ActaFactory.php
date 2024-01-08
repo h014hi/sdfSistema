@@ -39,6 +39,7 @@ class ActaFactory extends Factory
             //
 		'estado'=> $this->faker->randomElement(["ARCHIVADO","CONDESCARGO","TRAMITADO", "DESCONOCIDO","CONRDR"]),
         'numero' => str_pad($this->faker->unique()->randomNumber(7), 7, '0', STR_PAD_LEFT),
+        'agente'=> $this->faker->randomElement(["CONDUCTOR","TRANSPORTISTA","OPERADOR DE TERMINAL"]),
         'ruta' =>$this->faker->randomElement(["AYAVIRI-AZANGARO","JULIACA-PUNO","ILAVE-AZANGARO", "PUNO-HUANCANE"]),
 		'retencion' => $this->faker->randomElement(["LICENCIA","TUC","CITV", "SOAT","PLACA","NINGUNA"]),
         //'monto'=>$this->faker->randomElement([250.15,0,555.50]),

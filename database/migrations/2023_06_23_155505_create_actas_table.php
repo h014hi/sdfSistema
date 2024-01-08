@@ -13,10 +13,14 @@ return new class extends Migration
     {
         Schema::create('actas', function (Blueprint $table) {
             $table->id();
-            $table->string('numero',150)->nullable(false);
+
             $table->string('estado',150)->nullable(false);
+            $table->string('agente',30)->nullable(true);
+            $table->string('numero',150)->nullable(false);
+
             $table->text('retencion');
             $table->string('ruta')->nullable(true);
+
             $table->text('obs_intervenido')->nullable(true);
             $table->text('obs_inspector')->nullable(true);
             $table->text('obs_acta')->nullable(true);
@@ -44,6 +48,8 @@ return new class extends Migration
             //relacion con vehiculos intervenidos
             $table->unsignedBigInteger('vehiculo_id')->nullable();
             $table->foreign('vehiculo_id')->references('id')->on('vehiculos')->onDelete('set null');
+
+
 
             $table->timestamps();
         });

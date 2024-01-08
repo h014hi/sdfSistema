@@ -193,6 +193,7 @@ class ActaControlador extends Controller
         $nuevo_acta->operativo_id= $id;
         $nuevo_acta->numero= $request->input('acta');
         $nuevo_acta->estado= $request->input('condicion_id');
+        $nuevo_acta->agente= $request->input('agente_infrac');
         $nuevo_acta->obs_intervenido = $request->input('obs_intervenido');
         $nuevo_acta->obs_inspector = $request->input('obs_inspector');
         $nuevo_acta->obs_acta = $request->input('obs_acta');
@@ -215,6 +216,7 @@ class ActaControlador extends Controller
         $upacta = Acta::findOrFail($id);
         $upacta->numero= $request->input('acta');
         $upacta->estado= $request->input('condicion_id');
+        $upacta->agente= $request->input('agente_infrac');
         $upacta->obs_intervenido = $request->input('obs_intervenido');
         $upacta->obs_inspector = $request->input('obs_inspector');
         $upacta->obs_acta = $request->input('obs_acta');

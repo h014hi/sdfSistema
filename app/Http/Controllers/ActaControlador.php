@@ -8,7 +8,7 @@ use App\Models\Inspector;
 use App\Models\Empresa;
 use App\Models\Conductor;
 use App\Models\Pago;
-use App\Models\Infraccion;
+use App\Models\Infra_Incum;
 use App\Models\Operativo;
 use App\Models\Vehiculo;
 
@@ -201,7 +201,7 @@ class ActaControlador extends Controller
         $nuevo_acta->ruta= $request->input('ruta');
         $nuevo_acta->inspector_id =  $request->input('inspector');
         $nuevo_acta->empresa_id = $request->input('empresas');
-        $nuevo_acta->infraccion_id = $request->input('infraccion');
+        $nuevo_acta->Infra_Incum = $request->input('infraccion');
         $nuevo_acta->save();
         return redirect()->back();
     }
@@ -258,7 +258,7 @@ class ActaControlador extends Controller
         $inspectores = Inspector::all();
         $empresas = Empresa::all();
         $conductores = Conductor::all();
-        $infracciones = Infraccion::all();
+        $infracciones = Infra_Incum::all();
         $vehiculos = Vehiculo::all();
         $pagos = Pago::all();
         $actas = Acta::where('operativo_id', $id)->orderBy('updated_at', 'desc')->paginate(5);

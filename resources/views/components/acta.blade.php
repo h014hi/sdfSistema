@@ -170,7 +170,7 @@
                 <select name="infraccion" value="" id="" required
                 class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:focus:border-blue-500">
                 <option value="" disabled selected>Seleccione</option>
-                @foreach ($infracciones as $item)
+                @foreach ($ifra_incum as $item)
                     <option value= "{{$item->id}}">{{ $item->codigo}}</option>
                 @endforeach
                 </select>

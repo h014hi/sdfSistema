@@ -9,7 +9,6 @@ use App\Models\District;
 class DistritoController extends Controller
 {
     public function getDistritos($id){
-        $provincia = Province::find($id);
-        return District::where('province_id',$provincia->id)->get();
+        return Province::find($id)->provincia;
     }
 }

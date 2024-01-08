@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class Province extends Model
 {
     use HasFactory;
+
+    public function provincia()
+    {
+        return $this->hasMany(District::class);
+    }
 }

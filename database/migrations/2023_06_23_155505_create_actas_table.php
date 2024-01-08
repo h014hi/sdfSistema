@@ -42,8 +42,8 @@ return new class extends Migration
             $table->foreign('conductor_id')->references('id')->on('conductors')->onDelete('set null');
 
             //relacion con infraccion
-            $table->unsignedBigInteger('infraccion_id')->nullable();
-            $table->foreign('infraccion_id')->references('id')->on('infraccions')->onDelete('set null');
+            $table->unsignedBigInteger('infra_incum_id')->nullable();
+            $table->foreign('infra_incum_id')->references('id')->on('infra_incum')->onDelete('set null');
 
             //relacion con vehiculos intervenidos
             $table->unsignedBigInteger('vehiculo_id')->nullable();

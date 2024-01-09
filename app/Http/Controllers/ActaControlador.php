@@ -275,6 +275,11 @@ class ActaControlador extends Controller
         $infra = Infraccions::all();
         $incum = Incumplimiento::all();
 
+        $operativo = Operativo::find($id);;
+        if (!$operativo) {
+            // Manejar el caso en que no se encuentra el operativo
+            abort(404, 'Operativo no encontrado');
+        }
         return view('actas', [
             'resultados'=>$actas,
             'inspectores'=>$inspectores,
@@ -285,7 +290,9 @@ class ActaControlador extends Controller
             'infracciones'=>$infracciones,
             'vehiculos'=>$vehiculos,
             'pagos'=>$pagos,
-            'id'=>$id]);
+            'id'=>$id,
+            'operativo'=>$operativo
+        ]);
     }
 
     // ActaControlador.php

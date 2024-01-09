@@ -1,4 +1,4 @@
-@props(['resultados','inspectores','empresas','conductores','infracciones','vehiculos','pagos'])
+@props(['operativo','resultados','inspectores','empresas','conductores','infracciones','vehiculos','pagos','infra','incum'])
 
 <style>
     .formatted-info {
@@ -86,14 +86,58 @@
     <hr style="border-top: 2px solid #000;">
     <div class="space-x-3 flex justify-between">
 
+        <!----------------------------------->
         <div class="flex-1 space-y-3 small_container">
-            <label for="">Codigo de Infracción:</label>
-            <select name="infraccion" value="" id="infraccionedit"
-                class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:focus:border-blue-500">
-
+            <label for="">Seleccione:</label>
+            <select name="seleccion" id="seleccion_edit" onchange="toggleFieldsv2(this)"
+                class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-24 p-2.5 dark:focus:border-blue-500">
+                <option value="">Seleccione</option>
+                <option value="infraccion">Infracción</option>
+                <option value="incumplimiento">Incumplimiento</option>
             </select>
         </div>
+        <!----------------------------------->
+        <div id="infraFieldsv2" >
+            <div class="flex-1 space-y-3 small_container">
+                <label for="">Infracción:</label>
+                <select name="infraccion" id="infraccion_edit" onchange="loadSubCodigov2(this, 'infraccion')"
+                    class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:focus:border-blue-500">
+                    <option value="" selected disabled>Seleccione</option>
+                    @foreach ($infra as $item)
+                        <option value="{{$item->id}}">{{$item->codigo}}</option>
+                    @endforeach
+                </select>
+            </div>
 
+            <div class="flex-1 space-y-3 small_container">
+                <label for="">SubCódigo:</label>
+                <select id="infra_sub_edit" name="infra_sub" class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:focus:border-blue-500">
+                    <option value="Null" selected disabled>Seleccione</option>
+                </select>
+            </div>
+        </div>
+
+        <!----------------------------------->
+        <div id="incumFieldsv2">
+            <div class="flex-1 space-y-3 small_container">
+                <label for="">Incumplimiento:</label>
+                <select name="incumplimiento" id="incumplimiento_edit" onchange="loadSubCodigov2(this, 'incumplimiento')"
+                    class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:focus:border-blue-500">
+                    <option value="" selected disabled>Seleccione</option>
+                    @foreach ($incum as $item)
+                        <option value="{{$item->id}}">{{$item->codigo}}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="flex-1 space-y-3 small_container">
+                <label for="">Articulo:</label>
+                <select id="incum_sub_edit" name="incum_sub" class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:focus:border-blue-500">
+                    <option value="Null" selected disabled>Seleccione</option>
+                </select>
+            </div>
+        </div>
+        <!----------------------------------->
         <div class="flex-1 space-y-3 small_container">
             <label for="">Retencion de documentos:</label>
             <input type="text" name="retencion" id="retencionedit" value="NINGUNA"
@@ -261,11 +305,10 @@
 
 
 @endphp
-
-        <!--CUERPO-->
-        @php
+         <!--CUERPO-->
+         @php
             use Carbon\Carbon;
-            $ope = $resultados[0]->operativo;
+            $ope = $operativo;
             $fechaFormateada = Carbon::parse($ope->fecha)->locale('es')->isoFormat('LL');
         @endphp
 
@@ -284,7 +327,8 @@
                         <td>{{$acta->vehiculo->placa}}</td>
                         <td>{{$acta->ruta}}</td>
                         <td>{{$acta->conductor->nombres}}</td>
-                        <td>{{$acta->conductor->licencia}} - {{$acta->conductor->categoria}} / {{$acta->conductor->estadolicencia}}</td>
+                        <td>{{$acta->conductor->licencia}} <br> {{$acta->conductor->categoria}}</td>
+                        <td>{{$acta->conductor->estadolicencia}}</td>
                         <td>{{$acta->inspector->nombres}}{{$acta->inspector->apellidos}}</td>
                         @if ($acta->infra_incum->tipo === 'infraccion')
                             <td>{{$acta->infra_incum->infraccion->infraccionPadre->codigo}}{{$acta->infra_incum->infraccion->sub_cod}}</td>
@@ -373,6 +417,9 @@
                                             {{json_encode($acta->numero)}},
                                             {{json_encode($acta->estado)}},
                                             {{json_encode($acta->inspector->id)}},
+                                            {{json_encode($acta->infra_incum->tipo)}},
+                                            {{json_encode($acta->infra_incum->infraccion->id)}},
+                                            {{json_encode($acta->infra_incum->infraccion->infraccion_id)}},
                                             {{json_encode($acta->retencion)}},
                                             {{json_encode($acta->conductor->dni)}},
                                             {{json_encode($acta->conductor->nombres)}},
@@ -412,7 +459,7 @@
         </tbody>
 
     <script>
-                function editar_acta(id,numero,estado,inspector_id,infraccion_id,retencion,conductor_dni,conductor_nombres,conductor_apellidos,conductor_licencia,categoria,estadolicencia,empresa_id,vehiculo_placa,ruta2,obs_acta,obs_intervenido,obs_inspector)
+                function editar_acta(id,numero,estado,inspector_id,infra_incum_sel,infra_incum_id,infra_incum_infrac_id,retencion,conductor_dni,conductor_nombres,conductor_apellidos,conductor_licencia,categoria,estadolicencia,empresa_id,vehiculo_placa,ruta2,obs_acta,obs_intervenido,obs_inspector)
                     {
                         var ruta = "{{ route('acta.update', ['id' => ':id']) }}";
                         ruta = ruta.replace(':id', id);
@@ -420,7 +467,10 @@
                         document.getElementById("actaedit").value = numero;
                         document.getElementById("colorSelectedit").value = estado;
                         document.getElementById("inspectoredit").value = inspector_id;
-                        document.getElementById("infraccionedit").value = infraccion_id;
+                        document.getElementById("seleccion_edit").value = infra_incum_sel;
+                        //Hasta aqui lo deje jejejeje
+                        document.getElementById("infraccion_edit").value = infra_incum_infrac_id;
+                        document.getElementById("infra_sub_edit").value = infra_incum_id;
                         document.getElementById("retencionedit").value = retencion;
                         document.getElementById("dniedit").value = conductor_dni;
                         document.getElementById("nombresedit").value = conductor_nombres;
@@ -512,4 +562,56 @@
             width: '75%'
         });
     }
-    </script>
+
+    function loadSubCodigov2(codigo,tipo){
+        let codigoId = codigo.value;
+        let temproute = (tipo === 'infraccion') ? 'infra' : 'incum';
+
+        fetch('/' + temproute + '/' + codigoId)
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (jsonData) {
+                buildSelect(jsonData, tipo);
+            });
+    }
+    function buildSelect(infra_incums, tipo) {
+        let subId = (tipo === 'infraccion') ? 'infra_sub_edit' : 'incum_sub_edit';
+        let infra_incumSelect = document.getElementById(subId);
+
+        clearSelection(infra_incumSelect);
+
+        infra_incums.forEach(function (infra_incum) {
+            let optiontag = document.createElement('option');
+            optiontag.value = infra_incum.id;
+            if (tipo === 'infraccion') {
+                optiontag.innerHTML = infra_incum.sub_cod;
+            } else {
+                optiontag.innerHTML = infra_incum.articulo;
+            }
+
+            infra_incumSelect.append(optiontag);
+        });
+    }
+
+    function clearSelection(select){
+        while(select.options.length > 1){
+            select.remove(1);
+        }
+    }
+
+    function toggleFieldsv2(select) {
+        var selectedValue = select.value;
+        // Mostrar u ocultar campos según la selección
+        var infraFieldsv2 = document.getElementById('infraFieldsv2');
+        var incumFieldsv2 = document.getElementById('incumFieldsv2');
+
+        if (selectedValue === 'infraccion') {
+            infraFieldsv2.style.display = 'block';
+            incumFieldsv2.style.display = 'none';
+        } else {
+            infraFieldsv2.style.display = 'none';
+            incumFieldsv2.style.display = 'block';
+        }
+    }
+</script>

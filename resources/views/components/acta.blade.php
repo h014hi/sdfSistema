@@ -224,6 +224,11 @@
                     class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         placeholder="Detalles de retención" autocomplete="off">
             </div>
+            <!-------------------------------->
+            <!-- Botón para añadir más campos -->
+            <button class="btn btn-success btn-sm" onclick="agregarCampo()">
+                Agregar
+            </button>
 
         </div>
     </div>
@@ -413,7 +418,8 @@
                         <th scope="col">N° DE PLACA</th>
                         <th scope="col">RUTA</th>
                         <th scope="col">NOMBRE DEL CONDUCTOR</th>
-                        <th scope="col">LICENCIA / ESTADO</th>
+                        <th scope="col">LICENCIA / CATEGORIA</th>
+                        <th scope="col">ESTADO</th>
                         <th scope="col">INSPECTOR</th>
                         <th scope="col">FALTA</th>
                         <th scope="col">RETENCION</th>
@@ -422,7 +428,7 @@
                         <th scope="col">ACCIONES</th>
                     </tr>
                     </thead>
-                    <x-z01_tabla_actas_admin :resultados="$resultados" :inspectores="$inspectores" :empresas="$empresas" :conductores="$conductores" :infracciones="$infracciones" :vehiculos="$vehiculos" :pagos="$pagos"/>
+                    <x-z01_tabla_actas_admin :operativo="$operativo" :resultados="$resultados" :inspectores="$inspectores" :empresas="$empresas" :conductores="$conductores" :infra="$infra" :incum="$incum" :infracciones="$infracciones" :vehiculos="$vehiculos" :pagos="$pagos"/>
 
                 </table>
     </div>
@@ -445,7 +451,6 @@
 </style>
 
 <script>
-    var tempo;
     function toggleFields(select) {
         var selectedValue = select.value;
         // Mostrar u ocultar campos según la selección
@@ -455,16 +460,13 @@
         if (selectedValue === 'infraccion') {
             infraccionFields.style.display = 'block';
             incumplimientoFields.style.display = 'none';
-            tempo = 'infra';
         } else if (selectedValue === 'incumplimiento') {
             infraccionFields.style.display = 'none';
             incumplimientoFields.style.display = 'block';
-            tempo = 'incum';
         } else {
             // En caso de que no se haya seleccionado nada
             infraccionFields.style.display = 'none';
             incumplimientoFields.style.display = 'none';
-            tempo='none'
         }
     }
 
@@ -510,4 +512,33 @@
             select.remove(1);
         }
     }
+
+    //Para agregar
+    let contadorInfraccion = 1; // Contador para nombres únicos de campos
+
+    function agregarCampo() {
+        // Clonar el campo existente (puedes cambiar esto según la lógica específica)
+        let nuevoCampo = document.getElementById("infraccionFields").cloneNode(true);
+
+        // Incrementar el contador y actualizar los IDs y nombres únicos
+        contadorInfraccion++;
+        nuevoCampo.id = "infraccionFields_" + contadorInfraccion;
+
+        // Limpiar los valores de los campos clonados
+        nuevoCampo.querySelector("#infraccion").value = "";
+        nuevoCampo.querySelector("#infra_sub").value = "Null";
+
+        // Añadir el nuevo campo al final del contenedor
+        document.getElementById("infraccionFields").after(nuevoCampo);
+
+        // También puedes cambiar la lógica para cambiar el tipo del campo según tus necesidades
+        // En este ejemplo, simplemente cambio el nombre y el ID del campo clonado
+        nuevoCampo.id = "incumplimientoFields_" + contadorInfraccion;
+        nuevoCampo.querySelector("#infraccion").id = "incumplimiento";
+        nuevoCampo.querySelector("#infra_sub").id = "incum_sub";
+
+        // Añadir el nuevo campo al final del contenedor
+        document.getElementById("infraccionFields").after(nuevoCampo);
+    }
+
 </script>

@@ -224,12 +224,11 @@
                     class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
                         placeholder="Detalles de retención" autocomplete="off">
             </div>
-            <!-------------------------------->
-            <!-- Botón para añadir más campos -->
+            <!------------------------------
             <button class="btn btn-success btn-sm" onclick="agregarCampo()">
                 Agregar
             </button>
-
+            -->
         </div>
     </div>
 
@@ -402,6 +401,11 @@
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" style="background-color: #187BEC;">
          Registrar Acta
         </button>
+        <!------------
+        <button type="button" class="btn btn-success" style="background-color: #207743;">
+            Exportar a Excel
+        </button>
+        ------>
 
   </div>
 </div>

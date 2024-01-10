@@ -296,7 +296,279 @@
 </form>
 </div>
 
+<!------------------------------------------------------------------------------------------------------>
+<!-- Modal -->
+<div class="modal fade" id="formIFI" tabindex="-1" role="dialog" >
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-dialog-custom modal-lg" role="document">
+    <div class="modal-content">
+    <div class="modal-header"  style="background-color: #fb2d5b;" id = "headmod">
+        <h4 class="modal-title" id="myModalLabel"><b>INFORME FINAL DE INSTRUCCION</b></h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
 
+<div class="modal-body" style="padding: 40px;">
+<form id="formularioid" action="" method="POST">
+
+@csrf
+  <!--desde aqui es el formulario-->
+
+  <div class="space-y-3 mb-4">
+    <h2 class="font-bold"></h2>
+    <div class="space-y-3">
+        <div class="space-y-3 mb-4">
+            <h2 class="font-bold">SOBRE EL INFORME:</h2>
+            <hr style="border-top: 2px solid #000;">
+            <div class="space-x-3 flex justify-between">
+
+                <div class="flex-1 space-y-3 small_container">
+                    <label for="numero">PARA:</label>
+                    <input type="text" name="acta" id="actaedit" required
+                        class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        placeholder="">
+                </div>
+
+                <div class="flex-1 space-y-3 small_container">
+                    <label for="numero">DE:</label>
+                    <input type="text" name="acta" id="actaedit" required
+                        class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        placeholder="">
+                </div>
+
+                <div class="flex-1 space-y-3 small_container">
+                        <label for="numero">N° de Acta:</label>
+                        <input type="text" name="acta" id="actaedit" required
+                            class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                            placeholder="">
+                </div>
+
+                <div class="flex-1 space-y-3 small_container">
+                    <label for="numero">Propietarios</label>
+                    <input type="text" name="acta" id="actaedit" required
+                        class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        placeholder="">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="space-y-3 mb-4">
+    <h2 class="font-bold">SOBRE EL ACTA</h2>
+    <hr style="border-top: 2px solid #000;">
+    <div class="space-x-3 flex justify-between">
+
+        <!----------------------------------->
+        <div class="flex-1 space-y-3 small_container">
+            <label for="">Seleccione:</label>
+            <select name="seleccion" id="seleccion_edit" onchange="toggleFieldsv2(this)"
+                class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-24 p-2.5 dark:focus:border-blue-500">
+                <option value="">Seleccione</option>
+                <option value="infraccion">Infracción</option>
+                <option value="incumplimiento">Incumplimiento</option>
+            </select>
+        </div>
+        <!----------------------------------->
+        <div id="infraFieldsv2" >
+            <div class="flex-1 space-y-3 small_container">
+                <label for="">Infracción:</label>
+                <select name="infraccion" id="infraccion_edit" onchange="loadSubCodigov2(this, 'infraccion')"
+                    class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:focus:border-blue-500">
+                    <option value="" selected disabled>Seleccione</option>
+                    @foreach ($infra as $item)
+                        <option value="{{$item->id}}">{{$item->codigo}}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="flex-1 space-y-3 small_container">
+                <label for="">SubCódigo:</label>
+                <select id="infra_sub_edit" name="infra_sub" class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:focus:border-blue-500">
+                    <option value="Null" selected disabled>Seleccione</option>
+                </select>
+            </div>
+        </div>
+
+        <!----------------------------------->
+        <div id="incumFieldsv2">
+            <div class="flex-1 space-y-3 small_container">
+                <label for="">Incumplimiento:</label>
+                <select name="incumplimiento" id="incumplimiento_edit" onchange="loadSubCodigov2(this, 'incumplimiento')"
+                    class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:focus:border-blue-500">
+                    <option value="" selected disabled>Seleccione</option>
+                    @foreach ($incum as $item)
+                        <option value="{{$item->id}}">{{$item->codigo}}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="flex-1 space-y-3 small_container">
+                <label for="">Articulo:</label>
+                <select id="incum_sub_edit" name="incum_sub" class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:focus:border-blue-500">
+                    <option value="Null" selected disabled>Seleccione</option>
+                </select>
+            </div>
+        </div>
+        <!----------------------------------->
+        <div class="flex-1 space-y-3 small_container">
+            <label for="">Retencion de documentos:</label>
+            <input type="text" name="retencion" id="retencionedit" value="NINGUNA"
+            class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Detalles de retención" autocomplete="off">
+        </div>
+
+    </div>
+</div>
+
+<div class="space-y-3 mb-4 ">
+    <h2 class="font-bold">DATOS DEL CONDUCTOR <a id="alerta"></a></h2>
+    <hr style="border-top: 2px solid #000;">
+    <div class="space-x-3 flex justify-between">
+        <div class="flex-1 space-y-3 small_container">
+            <label for="">DNI:</label>
+            <input type="text" name="dni" id="dniedit" value=""
+                class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Ingrese su DNI">
+        </div>
+
+        <div class="flex-1 space-y-3 small_container">
+            <label for="">Nombres:</label>
+            <input type="text" name="nombres" id="nombresedit" value=''
+                class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Ingrese sus Nombres">
+        </div>
+        <div class="flex-1 space-y-3 small_container">
+            <label for="">Apellidos:</label>
+            <input type="text" name="apellidos" value=''
+                id="apellidosedit"
+                class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Ingrese sus Apellidos">
+        </div>
+    </div>
+</div>
+
+<div class="space-y-3 mb-4">
+    <h2 class="font-bold"><b>DATOS DE LA LICENCIA</b></h2>
+    <hr style="border-top: 2px solid #000;">
+    <div class="space-x-3 flex justify-between">
+
+        <div class="flex-1 space-y-3 small_container">
+            <label for="licencia">N° Licencia:</label>
+            <input type="text" name="licencia" id="licenciaedit"
+            class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+            >
+        </div>
+
+        <div class="flex-1 space-y-3">
+            <label for="categoria">Categoria:</label>
+            <select required  name="categoria" id="categoriaedit" class="bg-white-50 border border-gray-200 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-64 h-10 p-2.5 dark:focus:border-blue-500">
+                <option type="text" value="AI">AI</option>
+                <option type="text" value="A-IIa">A-IIa</option>
+                <option type="text" value="A-IIb">A-IIb</option>
+                <option type="text" value="A-IIIa">A-IIIa</option>
+                <option type="text" value="A-IIIb">A-IIIb</option>
+                <option type="text" value="A-IIIc">A-IIIc</option>
+                <option value="DESCONOCIDO">Desconocido</option>
+            </select>
+        </div>
+
+        <div class="flex-1 space-y-3">
+            <label for="estadol">Estado de la licencia:</label>
+            <select name="estadol" id="estadoedit" class="bg-white-50 border border-gray-200 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-64 h-10 p-2.5 dark:focus:border-blue-500">
+                <option type="text" value="VIGENTE">VIGENTE</option>
+                <option type="text" value="VENCIDO">VENCIDO</option>
+                <option type="text" value="ENTRAMITE">EN TRAMITE</option>
+                <option type="text" value="DESCONOCIDO">DESCONOCIDO</option>
+            </select>
+        </div>
+
+    </div>
+</div>
+
+<div class="space-y-3 mb-4">
+    <h2 class="font-bold">DATOS DEL VEHICULO <a id="alertados"></a></h2>
+    <hr style="border-top: 2px solid #000;">
+    <div class="space-x-3 flex justify-between">
+
+        <div class="flex-1 space-y-3 small_container">
+            <label for="">Empresa:</label>
+            <select name="empresas" value="" id="empresaedit" required
+                class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:focus:border-blue-500">
+                <option value="">Seleccione</option>
+                <option value= "21">PERSONA NATURAL NO HAY EMPRESA</option>
+                @foreach ($empresas as $item)
+                    <option value= "{{$item->id}}">{{ $item->razon_social}}</option>
+                @endforeach
+            </select>
+        </div>
+
+        <div class="flex-1 space-y-3 small_container">
+            <label for="">Placa:</label>
+            <input type="text" name="placa" id="placaedit"
+            class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Ingrese la Placa">
+        </div>
+
+        <div class="flex-1 space-y-3 small_container">
+            <label for="">Ruta:</label>
+            <input type="text" name="ruta" id="rutaedit"
+            class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                placeholder="Ingrese su ruta">
+        </div>
+    </div>
+</div>
+
+
+
+<div class="space-y-1 mb-4">
+    <h2 class="font-bold">OBSERVACIONES</h2>
+    <hr style="border-top: 2px solid #000;">
+    <div class="space-x-3 flex justify-between">
+
+        <div class="space-y-3 mb-4">
+            <div class="space-x-3 flex justify-between">
+                <div class="flex-1 space-y-3 small_container">
+                    <label for="">Observacion del Intervenido</label>
+                    <textarea type="text" name="obs_intervenido" id="obs_intervenidoedit"
+                    class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                    placeholder="Ingrese alguna observaciones del intervenido"    rows="4"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="space-y-3 mb-4">
+            <div class="space-x-3 flex justify-between">
+                <div class="flex-1 space-y-3 small_container">
+                    <label for="">Observaciones del Inspector</label>
+                    <textarea type="text" name="obs_inspector" id="obs_inspectoredit"
+                    class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        placeholder="Ingrese alguna observaciones del inspector" rows="4"></textarea>
+                </div>
+            </div>
+        </div>
+        <div class="space-y-3 mb-4">
+            <div class="space-x-3 flex justify-between">
+                <div class="flex-1 space-y-3 small_container">
+                    <label for="">Observaciones del Acta</label>
+                    <textarea type="text" name="obs_acta" id="obs_actaedit"
+                    class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                        placeholder="Ingrese alguna observaciones del Acta" rows="4"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-warning" data-dismiss="modal" style = "background-color: #EC7518; color:white;">Cerrar</button>
+        <button type="submit" class="btn btn-primary" style = "background-color: #187BEC;" >Guardar</button>
+    </div>
+    </div>
+</div>
+</div>
+</form>
+</div>
+<!------------------------------------------------------------------------------------------------------>
 @php
         function esFinDeSemana($fecha) {
           $diaSemana = date('N', strtotime($fecha)); // 1 (lunes) a 7 (domingo)
@@ -441,7 +713,7 @@
                                         <!-- <a href="{{ route('ifi', ['id' => json_encode($acta->id)]) }}" class="btn btn-success position-relative">
                                             + IFI
                                         </a>-->
-                                        <a href="" class="btn btn-success position-relative" data-toggle="modal" data-target="#ActaEdit">IFI</a>
+                                        <a href="" class="btn btn-success position-relative" data-toggle="modal" data-target="#formIFI">IFI</a>
                                         <form action="{{ route('acta.destroy', ['id' => $acta->id]) }}" method="POST" class="btn btn-danger d-inline" >
                                             @csrf
                                             @method('DELETE')

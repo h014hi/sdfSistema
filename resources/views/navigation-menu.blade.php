@@ -43,7 +43,7 @@
                         {{ __('Empresas') }}
                     </x-nav-link>
 
-                    <x-nav-link href="{{ route('grafico') }}" :active="request()->routeIs('grafico')">
+                    <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('grafico')">
                         {{ __('Reportes') }}
                     </x-nav-link>
 

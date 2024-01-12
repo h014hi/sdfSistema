@@ -6,7 +6,9 @@
     <thead>
         <tr>
             <th>Código:</th>
-            <th>Calificación</th>
+            <th>Descripcion</th>
+            <th>Calificacion</th>
+            <th>Medidas Preventivas</th>
             <th>Consecuencia</th>
             <th>Importe *</th>
             <th>Importe con 50% dscto. **</th>
@@ -14,13 +16,15 @@
     </thead>
     <tbody>
         <tr>
-            <td>{{ $infrac->codigo }}</td>
-            <td>{{ $infrac->calificacion }}</td>
-            <td>{{ $infrac->consecuencia }}</td>
-            <td>{{ $infrac->importe }}</td>
+            <td>{{$fracum->ffather->codigo}} {{$fracum->sub_cod}}</td>
+            <td>{{$fracum->ffather->detalle}} {{$fracum->descripcion}}</td>
+            <td>{{$fracum->calificacion}}</td>
+            <td>{{$fracum->m_preventivas}}</td>
+            <td>{{$fracum->consecuencia}}</td>
+            <td>{{$fracum->importe}}</td>
 
-            @if( $infrac->descuento=true)
-                <td>{{ $infrac->importe/2 }}</td>
+            @if($fracum->descuento=true)
+                <td>{{ $fracum->importe/2 }}</td>
             @else
                 {{ $nsa=true}}
                 <td> NSA ***</td>
@@ -32,17 +36,11 @@
 
 <div >
     <p class="m_p">
-        *   Si usted no esta de acuerdo con realizar el importe respectivo, puede presentar un descargo dentro del
-        plazo de cinco (5) dias habiles, contando despues del dia siguiente de la intervencion(no se cuentan Sabados
-        o Domingos), de acuerdo al <b>D.S. Nº 004-2020-MTC, Artículo 7 numeral 7.1 > Efectuar los descargos de la
-        imputación efectuada</b>
-    </p>
-    <p>
-        Siempre y cuando tenga las suficientes evidencias para desvirtuar el acta de control.
-    </p>
-    <p class="m_p_infra">
-        **  El importe con 50% de descuento se aplica siempre y cuando este dentro del plazo de los cinco (5) dias
-        habiles, contando despues del dia siguiente de la intervencion(no se cuentan Sabados o Domingos).
+        *   De considerar la presentación de un descargo, puede realizarlo en la Sede Principal(Jr. Lima N°944-ciudad de Puno)
+        (Tramite Documentario) de la Direccion Regional de Transportes y Comunicaciones de Puno; para lo cual dispone de cinco
+        (5) dias habiles a partir del dia siguiente de notificado el acta de control de acuerdo con lo dispuesto en el Reglamento
+        del Procedimiento Administrativo Sancionador Especial de Tramitacion Sumaria en materia de transporte y transito terrestre
+        y sus servicios.
     </p>
     @if ($nsa==true)
         <p class="m_p_infra">
@@ -51,5 +49,5 @@
     @endif
 </div>
 <a href="{{ route('home') }}" class="btn btn-primary">
-    Regresar a la página principal
+    Página principal
 </a>

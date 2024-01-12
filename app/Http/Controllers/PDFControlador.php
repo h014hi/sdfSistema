@@ -21,7 +21,7 @@ class PDFControlador extends Controller
     public function generarPDF()
     {
         $dompdf = new Dompdf();
-       
+
         $datos = Operativo::all();
 
         // Componer el HTML
@@ -37,18 +37,18 @@ class PDFControlador extends Controller
         $html .= '</tr>';
         $html .= '</thead>';
         $html .= '<tbody>';
-        
+
 
         $total_operativos = 0;
         $total_actas = 0;
-        
+
         foreach ($datos as $item) {
             $html .= '<tr>';
             $html .= '<td style="border: 1px solid #ddd; padding: 8px;">' . $item->fecha . '</td>';
             $html .= '<td style="border: 1px solid #ddd; padding: 8px;">01</td>';
             $html .= '<td style="border: 1px solid #ddd; padding: 8px;">' . $item->tipo . '</td>';
             $html .= '<td style="border: 1px solid #ddd; padding: 8px;">' . $item->lugar . '</td>';
-            
+
             $actas = json_decode($item->actas, true);
             $cantidadActas = count($actas);
             $total_actas+=$cantidadActas;
@@ -58,7 +58,7 @@ class PDFControlador extends Controller
             }
             else
             {
-                $html .= '<td style="border: 1px solid #ddd; padding: 8px;">0' . $cantidadActas . '</td>';   
+                $html .= '<td style="border: 1px solid #ddd; padding: 8px;">0' . $cantidadActas . '</td>';
             }
             $html .= '</tr>';
             $total_operativos+=1;
@@ -72,7 +72,7 @@ class PDFControlador extends Controller
             }
             else
             {
-                $html .= '<td style="border: 1px solid #ddd; padding: 8px;">0' . $total_operativos . '</td>';   
+                $html .= '<td style="border: 1px solid #ddd; padding: 8px;">0' . $total_operativos . '</td>';
             }
         $html .= '<td style="border: 1px solid #ddd; padding: 8px;" colspan="2"></td>';
         if($total_actas >9)
@@ -81,24 +81,24 @@ class PDFControlador extends Controller
             }
             else
             {
-                $html .= '<td style="border: 1px solid #ddd; padding: 8px;">0' . $total_actas . '</td>';   
+                $html .= '<td style="border: 1px solid #ddd; padding: 8px;">0' . $total_actas . '</td>';
             }
         $html .= '</tr>';
 
 
         $html .= '</tbody>';
         $html .= '</table>';
-        
+
         // Resto del código...
         // Añadir el HTML a dompdf
             $dompdf->loadHtml($html);
-                    
+
             //Establecer el tamaño de hoja en DOMPDF
             $dompdf->setPaper('A4', 'portrait');
-            
+
             // Renderizar el PDF
             $dompdf->render();
-            
+
             // Forzar descarga del PDF
             $dompdf->stream("REPORTEOPERATIVO.pdf", [ "Attachment" => true]);
 
@@ -112,7 +112,7 @@ class PDFControlador extends Controller
 
         $templatePath = public_path('plantillaifidos.docx');
         $templateProcessor = new TemplateProcessor($templatePath);
-        
+
         // Establecer el idioma a español
         Carbon::setLocale('es');
 
@@ -129,10 +129,18 @@ class PDFControlador extends Controller
         $templateProcessor->setValue('conductor', $acta->conductor->nombres.' '.$acta->conductor->apellidos);
         $templateProcessor->setValue('ruta', $acta->ruta);
         $templateProcessor->setValue('fecha',strftime($acta->operativo->fecha) );
-        $templateProcessor->setValue('propietarios', 'EN DESARROLLO');
+        $templateProcessor->setValue('lugar',$acta->operativo->lugar);
+        $templateProcessor->setValue('propietarios', '(DIGITAR SEGUN SUNARP)');
         $templateProcessor->setValue('licencia', $acta->conductor->licencia);
         $templateProcessor->setValue('categoria', $acta->categoria);
-        $templateProcessor->setValue('lugar',$acta->operativo->lugar);
+        $templateProcessor->setValue('fracumfather',$acta->fracums[0]->fCods[0]->codigo);
+        $templateProcessor->setValue('fracumson',$acta->fracums[0]->fSubCods[0]->sub_cod);
+        $templateProcessor->setValue('fracumfather_detalle',$acta->fracums[0]->fCods[0]->detalle);
+        $templateProcessor->setValue('fracumson_descripcion',$acta->fracums[0]->fSubCods[0]->descripcion);
+        $templateProcessor->setValue('fracumson_calificacion',$acta->fracums[0]->fSubCods[0]->calificacion);
+        $templateProcessor->setValue('fracumson_consecuencia',$acta->fracums[0]->fSubCods[0]->consecuencia);
+        $templateProcessor->setValue('fracumson_mpreventivas',$acta->fracums[0]->fSubCods[0]->m_preventivas);
+
 
         //GUARDAR EN GOOGLE DRIVE POR ELLO NECESITAREMOS LA API DE GOOGLE DRIVE
         $documentoGenerado = storage_path('app/public/documento_generado.docx');
@@ -155,13 +163,13 @@ class PDFControlador extends Controller
 
         // Descargar el documento y eliminarlo del lugar donde se guardo
         return response()->download($documentoGenerado)->deleteFileAfterSend(true);
-        
+
     }
 
 
     public function mostrarGrafico(Request $request)
     {
-        
+
         $labels = array();
         $datos = array();
 
@@ -178,7 +186,7 @@ class PDFControlador extends Controller
         }
 
         else {
-            
+
             $infracciones = Infraccion::all();
 
             foreach($infracciones as $infraccion)
@@ -192,7 +200,7 @@ class PDFControlador extends Controller
                 array_push($datos,count($actas));
             }
 
-        }        
+        }
 
         return view('grafico', compact('labels', 'datos'));
     }
@@ -207,9 +215,9 @@ class PDFControlador extends Controller
         if($tiporeporte == "OPERATIVO")
         {
             $dompdf = new Dompdf();
-       
+
                 $datos = Operativo::whereBetween('fecha', [$request->input('fecha_inicio'), $request->input('fecha_fin')])->get();
-                
+
                 // Componer el HTML
                 $html = '<center><h1>REPORTE DE OPERATIVOS</h1></center>';
                 $html .= '<center><p>Fecha de consulta: '.$fechahoy.'</p></center>';
@@ -224,18 +232,18 @@ class PDFControlador extends Controller
                 $html .= '</tr>';
                 $html .= '</thead>';
                 $html .= '<tbody>';
-                
+
 
                 $total_operativos = 0;
                 $total_actas = 0;
-                
+
                 foreach ($datos as $item) {
                     $html .= '<tr>';
                     $html .= '<td style="border: 1px solid #ddd; padding: 8px;">' . $item->fecha . '</td>';
                     $html .= '<td style="border: 1px solid #ddd; padding: 8px;">01</td>';
                     $html .= '<td style="border: 1px solid #ddd; padding: 8px;">' . $item->tipo . '</td>';
                     $html .= '<td style="border: 1px solid #ddd; padding: 8px;">' . $item->lugar . '</td>';
-                    
+
                     $actas = json_decode($item->actas, true);
                     $cantidadActas = count($actas);
                     $total_actas+=$cantidadActas;
@@ -245,7 +253,7 @@ class PDFControlador extends Controller
                     }
                     else
                     {
-                        $html .= '<td style="border: 1px solid #ddd; padding: 8px;">0' . $cantidadActas . '</td>';   
+                        $html .= '<td style="border: 1px solid #ddd; padding: 8px;">0' . $cantidadActas . '</td>';
                     }
                     $html .= '</tr>';
                     $total_operativos+=1;
@@ -259,7 +267,7 @@ class PDFControlador extends Controller
                     }
                     else
                     {
-                        $html .= '<td style="border: 1px solid #ddd; padding: 8px;">0' . $total_operativos . '</td>';   
+                        $html .= '<td style="border: 1px solid #ddd; padding: 8px;">0' . $total_operativos . '</td>';
                     }
                 $html .= '<td style="border: 1px solid #ddd; padding: 8px;" colspan="2"></td>';
                 if($total_actas >9)
@@ -268,24 +276,24 @@ class PDFControlador extends Controller
                     }
                     else
                     {
-                        $html .= '<td style="border: 1px solid #ddd; padding: 8px;">0' . $total_actas . '</td>';   
+                        $html .= '<td style="border: 1px solid #ddd; padding: 8px;">0' . $total_actas . '</td>';
                     }
                 $html .= '</tr>';
 
 
                 $html .= '</tbody>';
                 $html .= '</table>';
-                
+
                 // Resto del código...
                 // Añadir el HTML a dompdf
                     $dompdf->loadHtml($html);
-                            
+
                     //Establecer el tamaño de hoja en DOMPDF
                     $dompdf->setPaper('A4', 'portrait');
-                    
+
                     // Renderizar el PDF
                     $dompdf->render();
-                    
+
                     // Forzar descarga del PDF
                     $dompdf->stream("REPORTEOPERATIVO.pdf", [ "Attachment" => true]);
 
@@ -295,15 +303,15 @@ class PDFControlador extends Controller
         {
             if($request->input('consulta_por') == "empresa")
                 {
-                
+
                 $datoss = Infraccion::all();
-                
+
                 //join('operativo', 'acta.operativo_id', '=', 'operativo.id')
                 //        ->where('acta.empresa_id', $request->input('empresas'))
                 //        ->whereBetween('operativo.fecha', [$request->input('fecha_inicio'), $request->input('fecha_fin')])
                 //        ->get();
 
-            
+
                     $datosempresa = Empresa::where('id',$request->input('empresas'))->first();
 
                     //$datosempresa = json_decode($datosempresa, true);
@@ -313,7 +321,7 @@ class PDFControlador extends Controller
                     $html .=' <h5 style="text-align: center;">SUBDIRECCIÓN DE FISCALIZACIÓN</h5>';
                     $html .='<hr>';
 
-                   
+
                     $fechahoy = date('d \d\e F \d\e\l Y');
 
                     $html.=' <p style="text-align: left;"><i><b>GERENTE DE LA EMPRESA: </b>'.$datosempresa->nombres_rep_legal.' '.$datosempresa->apellidos_rep_legal.'</p></i>';
@@ -335,7 +343,7 @@ class PDFControlador extends Controller
                             ->whereBetween('operativos.fecha', [$request->input('fecha_inicio'), $request->input('fecha_fin')])
                             ->get();
 
-                        
+
                         array_push($labels, $infraccion->codigo);
                         array_push($datos, count($actas));
                     }
@@ -383,11 +391,11 @@ class PDFControlador extends Controller
                             $html .='<br>';
                             $html .='<center><h3>GRAFICO ESTADISTICO</h3></center>';
                             $html .= '
-                            
+
                             <div style="padding: 15px;">
                             <img src="data:image/svg+xml;base64,' . base64_encode(file_get_contents($file)) . '"/>
                             </div>
-                            
+
                             ';
 
 
@@ -408,13 +416,13 @@ class PDFControlador extends Controller
                     $incumplimientos = 0;
                     $archivado_i = 0;
                     $archivado_j = 0;
-                          
+
                     foreach ($datoss as $dato)
                     {
-                    
+
                     foreach($dato->actas as $acta)
                     {
-                        
+
                         if($acta->operativo->fecha >= $request->input('fecha_inicio') && $acta->operativo->fecha <= $request->input('fecha_fin') && $acta->empresa_id == $request->input('empresas') )
                         {
                             if($acta->infraccion->tipo == "INFRACCION")
@@ -435,9 +443,9 @@ class PDFControlador extends Controller
                                 $incumplimientos+=1;
                             }
                         }
-                        
+
                     }
-    
+
                     }
 
 
@@ -467,17 +475,17 @@ class PDFControlador extends Controller
 
                     $html.='<i style="text-align: center;">El reporte y el gráfico se genero a partir de todas las actas impuestas entre las fechas ('.$request->input('fecha_inicio').' ; '.$request->input('fecha_fin').')</i>';
 
-                    
+
                     $dompdf = new Dompdf();
 
                     $dompdf->loadHtml($html);
-                            
+
                     //Establecer el tamaño de hoja en DOMPDF
                     $dompdf->setPaper('A4', 'portrait');
-                    
+
                     // Renderizar el PDF
                     $dompdf->render();
-                    
+
                     // Forzar descarga del PDF
                     $dompdf->stream("EMPRESAREPORTE.pdf", [ "Attachment" => true]);
 
@@ -488,14 +496,14 @@ class PDFControlador extends Controller
             else
             {
                 $datoss = Infraccion::all();
-                
+
                     //$datosempresa = json_decode($datosempresa, true);
                     $html = '<hr>';
                     $html .=' <h5 style="text-align: center;">REPORTE DE INFRACCIONES E INCUMPLIMIENTOS</h5>';
                     $html .=' <h5 style="text-align: center;">SUBDIRECCIÓN DE FISCALIZACIÓN</h5>';
                     $html .='<hr>';
 
-                   
+
                     $fechahoy = date('d \d\e F \d\e\l Y');
                     $html.=' <p style="text-align: left;"><i><b>FECHA DE CONSULTA: </b>'.$fechahoy.'</p></i>';
 
@@ -559,11 +567,11 @@ class PDFControlador extends Controller
                             $html .='<br>';
                             $html .='<center><h3>GRAFICO ESTADISTICO</h3></center>';
                             $html .= '
-                            
+
                             <div style="padding: 15px;">
                             <img src="data:image/svg+xml;base64,' . base64_encode(file_get_contents($file)) . '"/>
                             </div>
-                            
+
                             ';
 
 
@@ -584,13 +592,13 @@ class PDFControlador extends Controller
                     $incumplimientos = 0;
                     $archivado_i = 0;
                     $archivado_j = 0;
-                          
+
                     foreach ($datoss as $dato)
                     {
 
                     foreach($dato->actas as $acta)
                     {
-                        
+
                         if($acta->operativo->fecha >= $request->input('fecha_inicio') && $acta->operativo->fecha <= $request->input('fecha_fin'))
                         {
                             if($acta->infraccion->tipo == "INFRACCION")
@@ -611,9 +619,9 @@ class PDFControlador extends Controller
                                 $incumplimientos+=1;
                             }
                         }
-                        
+
                     }
-    
+
                     }
 
 
@@ -659,14 +667,14 @@ class PDFControlador extends Controller
                             ->where('infraccion_id', $infraccion->id)
                             ->whereBetween('operativos.fecha', [$request->input('fecha_inicio'), $request->input('fecha_fin')])
                             ->get();
-                        
+
                             $archivado_i = 0;
                             $archivado_j = 0;
 
                         $html.='<tr>';
                         $html.='                 <td style="border: 1px solid #ccc; padding: 8px;">'.$infraccion->codigo.'</td>';
                         $html.='                 <td style="border: 1px solid #ccc; padding: 8px;">'.$actas->count().'</td>';
-                        $html.='</tr>';        
+                        $html.='</tr>';
                     }
 
                     $html.='     </tbody>';
@@ -674,37 +682,37 @@ class PDFControlador extends Controller
 
                     $html.='<i style="text-align: center;">El reporte y el gráfico se genero a partir de todas las actas impuestas entre las fechas ('.$request->input('fecha_inicio').' ; '.$request->input('fecha_fin').')</i>';
 
-                    
+
                     $dompdf = new Dompdf();
 
                     $dompdf->loadHtml($html);
-                            
+
                     //Establecer el tamaño de hoja en DOMPDF
                     $dompdf->setPaper('A4', 'portrait');
-                    
+
                     // Renderizar el PDF
                     $dompdf->render();
-                    
+
                     // Forzar descarga del PDF
                     $dompdf->stream("GENERALREPORTE.pdf", [ "Attachment" => true]);
 
                     unlink($file);
 
-                    return redirect()->back();   
+                    return redirect()->back();
             }
         }
         else
         {
             $operativos = Operativo::whereBetween('operativos.fecha', [$request->input('fecha_inicio'), $request->input('fecha_fin')])
             ->get();
-                
+
             //$datosempresa = json_decode($datosempresa, true);
             $html = '<hr>';
             $html .=' <h2 style="text-align: center;">REPORTE DE PAGOS</h2>';
             $html .=' <h5 style="text-align: center;">SUBDIRECCIÓN DE FISCALIZACIÓN</h5>';
             $html .='<hr>';
 
-           
+
             $fechahoy = date('d \d\e F \d\e\l Y');
             $html.=' <p style="text-align: left;"><i><b>FECHA DE CONSULTA: </b>'.$fechahoy.'</p></i>';
 
@@ -733,7 +741,7 @@ class PDFControlador extends Controller
                                 $tipoa+=$pago->monto;
                             }
                             else if($pago->tipo == "INFRACCION")
-                            {    
+                            {
                                 $tipob+=$pago->monto;
                             }
                             else
@@ -764,26 +772,26 @@ class PDFControlador extends Controller
                 $html.='                 <td style="border: 1px solid #ccc; padding: 8px;">TOTAL</td>';
                 $html.='                 <td style="border: 1px solid #ccc; padding: 8px;">'.($tipoc + $tipoa + $tipob).'</td>';
             $html.='</tr>';
-        
+
             $html.='     </tbody>';
             $html.=' </table>';
 
-            
+
             $dompdf = new Dompdf();
 
             $dompdf->loadHtml($html);
-                    
+
             //Establecer el tamaño de hoja en DOMPDF
             $dompdf->setPaper('A4', 'portrait');
-            
+
             // Renderizar el PDF
             $dompdf->render();
-            
+
             // Forzar descarga del PDF
             $dompdf->stream("REPORTEDEPAGOS.pdf", [ "Attachment" => true]);
 
-            return redirect()->back();   
+            return redirect()->back();
         }
-    } 
+    }
 
 }

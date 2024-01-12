@@ -9,7 +9,6 @@ use App\Models\Inspector;
 use App\Models\Conductor;
 use App\Models\Vehiculo;
 use App\Models\Pago;
-use App\Models\Infraccion;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -31,7 +30,6 @@ class ActaFactory extends Factory
         $inspector = Inspector::all()->random();
         $conductor = Conductor::all()->random();
         $vehiculo = Vehiculo::all()->random();
-        $infraccion = Infraccion::all()->random();
         $pago = Pago::all()->random();
 
 
@@ -48,7 +46,6 @@ class ActaFactory extends Factory
         'inspector_id'=>$inspector->id,
         'conductor_id'=>$conductor->id,
         'vehiculo_id'=>$vehiculo->id,
-        'infraccion_id'=>$infraccion->id,
         //'pago_id'=>$pago->id,
         'obs_acta'=>$this->faker->text(),
         ];

@@ -11,17 +11,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('infraccions', function (Blueprint $table) {
+        Schema::create('fracumson', function (Blueprint $table) {
+            $table->unsignedBigInteger('fracumfather_id')->nullable();
             $table->id();
-            $table->char('codigo',4)->nullable(false);
-            $table->char('tipo',15)->nullable(false);
-            $table->text('descripcion')->nullable(false);
+            $table->char('sub_cod',10)->nullable(true);
+            $table->text('descripcion')->nullable(true);
             $table->char('calificacion',10)->nullable(false);
-            $table->text('m_preventivas',10)->nullable(true);
-            $table->text('consecuencia')->nullable(true);
+            $table->text('m_preventivas')->nullable(true);
+            $table->text('consecuencia')->nullable(false);
             $table->decimal('importe',8,2)->nullable(true);
             $table->boolean('descuento')->nullable(true);
+
             $table->timestamps();
+
+            $table->foreign('fracumfather_id')->references('id')->on('fracumfather')->onDelete('set null');
         });
     }
 
@@ -30,6 +33,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('infraccions');
+        Schema::dropIfExists('fracumson');
     }
 };

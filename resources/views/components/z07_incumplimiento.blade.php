@@ -2,28 +2,30 @@
     <thead>
         <tr>
             <th>Código:</th>
-            <th>Calificación</th>
+            <th>Descripcion</th>
+            <th>Calificacion</th>
+            <th>Medidas Preventivas</th>
             <th>Consecuencia</th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <td>{{ $infrac->codigo }}</td>
-            <td>{{ $infrac->calificacion }}</td>
-            <td>{{ $infrac->consecuencia }}</td>
+            <td>{{$fracum->ffather->codigo}} {{$fracum->sub_cod}}</td>
+            <td>{{$fracum->ffather->detalle}} {{$fracum->descripcion}}</td>
+            <td>{{$fracum->calificacion}}</td>
+            <td>{{$fracum->m_preventivas}}</td>
+            <td>{{$fracum->consecuencia}}</td>
         </tr>
     </tbody>
 </table>
 
 <p class="m_p">
-    Usted puede presentar su descargo dentro del plazo de 5 dias habiles, contando luego del dia siguiente a la
-    intervencion (No se cuentan Sabados o Domingos), de acuerdo al:
-</p>
-<p>
-   <b>D.S. Nº 004-2020-MTC, Artículo 7 numeral 7.1 : Efectuar los descargos de la imputación efectuada.</b></p>
-<p>
-    Siempre y cuando tenga las suficientes evidencias para desvirtuar el acta de control.
+    *   De considerar la presentación de un descargo, puede realizarlo en la Sede Principal(Jr. Lima N°944-ciudad de Puno)
+    (Tramite Documentario) de la Direccion Regional de Transportes y Comunicaciones de Puno; para lo cual dispone de cinco
+    (5) dias habiles a partir del dia siguiente de notificado el acta de control de acuerdo con lo dispuesto en el Reglamento
+    del Procedimiento Administrativo Sancionador Especial de Tramitacion Sumaria en materia de transporte y transito terrestre
+    y sus servicios.
 </p>
 <a href="{{ route('home') }}" class="btn btn-primary">
-    Regresar a la página principal
+    Página principal
 </a>

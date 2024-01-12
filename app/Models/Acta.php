@@ -32,21 +32,15 @@ class Acta extends Model
 		return $this->belongsTo(Vehiculo::class);
 	}
 
-	public function infraccion()
-	{
-		return $this->belongsTo(Infraccion::class);
-	}
-
-    public function infra_incum()
-	{
-		return $this->belongsTo(Infra_Incum::class);
-	}
-
 	public function pagos()
 	{
 		return $this->hasMany(Pago::class);
 	}
 
+    public function fracums()
+	{
+		return $this->belongsToMany(Fracum::class)->with('fSubCods');;
+	}
 
     use HasFactory;
 }

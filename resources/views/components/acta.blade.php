@@ -164,24 +164,14 @@
             <hr style="border-top: 2px solid #000;">
             <div class="space-x-3 flex justify-between">
 
-            <div class="flex-1 space-y-3 small_container">
-                <label for="">Seleccione:</label>
-                <select name="seleccion" id="seleccion" onchange="toggleFields(this)"
-                    class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-24 p-2.5 dark:focus:border-blue-500">
-                    <option value="">Seleccione</option>
-                    <option value="infraccion">Infracción</option>
-                    <option value="incumplimiento">Incumplimiento</option>
-                </select>
-            </div>
-
             <!-- Campos de Infracción -->
-            <div id="infraccionFields" style="display: none;">
+            <div id="infraccionFields">
                 <div class="flex-1 space-y-3 small_container">
-                    <label for="">Infracción:</label>
-                    <select name="infraccion" id="infraccion" onchange="loadSubCodigo(this, 'infraccion')"
+                    <label for="">Codigo:</label>
+                    <select required name="fracumfather" id="fracumfather" onchange="loadSubCodigo(this)"
                         class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:focus:border-blue-500">
                         <option value="" selected disabled>Seleccione</option>
-                        @foreach ($infra as $item)
+                        @foreach ($fracumfather as $item)
                             <option value="{{$item->id}}">{{$item->codigo}}</option>
                         @endforeach
                     </select>
@@ -189,33 +179,11 @@
 
                 <div class="flex-1 space-y-3 small_container">
                     <label for="">SubCódigo:</label>
-                    <select id="infra_sub" name="infra_sub" class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:focus:border-blue-500">
-                        <option value="Null" selected disabled>Seleccione</option>
+                    <select required id="fracumson" name="fracumson" class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:focus:border-blue-500">
+                        <option value="Null" selected disabled> Seleccione</option>
                     </select>
                 </div>
             </div>
-
-            <!-- Campos de Incumplimiento -->
-            <div id="incumplimientoFields" style="display: none;">
-                <div class="flex-1 space-y-3 small_container">
-                    <label for="">Incumplimiento:</label>
-                    <select name="incumplimiento" id="incumplimiento" onchange="loadSubCodigo(this, 'incumplimiento')"
-                        class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:focus:border-blue-500">
-                        <option value="" selected disabled>Seleccione</option>
-                        @foreach ($incum as $item)
-                            <option value="{{$item->id}}">{{$item->codigo}}</option>
-                        @endforeach
-                    </select>
-                </div>
-
-                <div class="flex-1 space-y-3 small_container">
-                    <label for="">Articulo:</label>
-                    <select id="incum_sub" name="incum_sub" class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500  w-full p-2.5 dark:focus:border-blue-500">
-                        <option value="Null" selected disabled>Seleccione</option>
-                    </select>
-                </div>
-            </div>
-
             <!-------------------------------------------------------------->
 
             <div class="flex-1 space-y-3 small_container">
@@ -425,14 +393,14 @@
                         <th scope="col">LICENCIA / CATEGORIA</th>
                         <th scope="col">ESTADO</th>
                         <th scope="col">INSPECTOR</th>
-                        <th scope="col">FALTA</th>
+                        <th scope="col" style="width: 5%;">FALTA</th>
                         <th scope="col">RETENCION</th>
                         <th scope="col">OBSERVACIONES</th>
-                        <th scope="col">ESTADO</th>
+                        <th scope="col" style="width: 10%;">ESTADO</th>
                         <th scope="col">ACCIONES</th>
                     </tr>
                     </thead>
-                    <x-z01_tabla_actas_admin :operativo="$operativo" :resultados="$resultados" :inspectores="$inspectores" :empresas="$empresas" :conductores="$conductores" :infra="$infra" :incum="$incum" :infracciones="$infracciones" :vehiculos="$vehiculos" :pagos="$pagos"/>
+                    <x-z01_tabla_actas_admin :operativo="$operativo" :resultados="$resultados" :inspectores="$inspectores" :empresas="$empresas" :conductores="$conductores" :fracumfather="$fracumfather" :fracumson="$fracumson" :fracum="$fracum" :vehiculos="$vehiculos" :pagos="$pagos"/>
 
                 </table>
     </div>
@@ -455,59 +423,30 @@
 </style>
 
 <script>
-    function toggleFields(select) {
-        var selectedValue = select.value;
-        // Mostrar u ocultar campos según la selección
-        var infraccionFields = document.getElementById('infraccionFields');
-        var incumplimientoFields = document.getElementById('incumplimientoFields');
-
-        if (selectedValue === 'infraccion') {
-            infraccionFields.style.display = 'block';
-            incumplimientoFields.style.display = 'none';
-        } else if (selectedValue === 'incumplimiento') {
-            infraccionFields.style.display = 'none';
-            incumplimientoFields.style.display = 'block';
-        } else {
-            // En caso de que no se haya seleccionado nada
-            infraccionFields.style.display = 'none';
-            incumplimientoFields.style.display = 'none';
-        }
-    }
-
     // Select Anidado
-    function loadSubCodigo(codigo, tipo) {
+    function loadSubCodigo(codigo) {
         let codigoId = codigo.value;
-        let temproute = (tipo === 'infraccion') ? 'infra' : 'incum';
-
-        fetch('/' + temproute + '/' + codigoId)
+        fetch('/fracum/' + codigoId)
             .then(function (response) {
                 return response.json();
             })
             .then(function (jsonData) {
-                buildSelectInfra_incum(jsonData, tipo);
+                buildSelectInfra_incum(jsonData);
             });
     }
 
-    function buildSelectInfra_incum(infra_incums, tipo) {
-        let subId = (tipo === 'infraccion') ? 'infra_sub' : 'incum_sub';
-        let infra_incumSelect = document.getElementById(subId);
+    function buildSelectInfra_incum(fracums) {
+        let fracumSelect = document.getElementById('fracumson');
 
-        clearSelect(infra_incumSelect);
+        clearSelect(fracumSelect);
 
 
-        infra_incums.forEach(function (infra_incum) {
-
+        fracums.forEach(function (fracum) {
 
             let optiontag = document.createElement('option');
-            optiontag.value = infra_incum.id;
-
-            if (tipo === 'infraccion') {
-                optiontag.innerHTML = infra_incum.sub_cod;
-            } else {
-                optiontag.innerHTML = infra_incum.articulo;
-            }
-
-            infra_incumSelect.append(optiontag);
+            optiontag.value = fracum.id;
+            optiontag.innerHTML = fracum.sub_cod;
+            fracumSelect.append(optiontag);
         });
     }
 
@@ -516,33 +455,4 @@
             select.remove(1);
         }
     }
-
-    //Para agregar
-    let contadorInfraccion = 1; // Contador para nombres únicos de campos
-
-    function agregarCampo() {
-        // Clonar el campo existente (puedes cambiar esto según la lógica específica)
-        let nuevoCampo = document.getElementById("infraccionFields").cloneNode(true);
-
-        // Incrementar el contador y actualizar los IDs y nombres únicos
-        contadorInfraccion++;
-        nuevoCampo.id = "infraccionFields_" + contadorInfraccion;
-
-        // Limpiar los valores de los campos clonados
-        nuevoCampo.querySelector("#infraccion").value = "";
-        nuevoCampo.querySelector("#infra_sub").value = "Null";
-
-        // Añadir el nuevo campo al final del contenedor
-        document.getElementById("infraccionFields").after(nuevoCampo);
-
-        // También puedes cambiar la lógica para cambiar el tipo del campo según tus necesidades
-        // En este ejemplo, simplemente cambio el nombre y el ID del campo clonado
-        nuevoCampo.id = "incumplimientoFields_" + contadorInfraccion;
-        nuevoCampo.querySelector("#infraccion").id = "incumplimiento";
-        nuevoCampo.querySelector("#infra_sub").id = "incum_sub";
-
-        // Añadir el nuevo campo al final del contenedor
-        document.getElementById("infraccionFields").after(nuevoCampo);
-    }
-
 </script>

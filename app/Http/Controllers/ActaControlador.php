@@ -4,16 +4,16 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Acta;
+use App\Models\Acta_Fracum;
 use App\Models\Inspector;
 use App\Models\Empresa;
 use App\Models\Conductor;
+use App\Models\Fracum;
+use App\Models\FracumFather;
+use App\Models\FracumSon;
 use App\Models\Pago;
-use App\Models\Infraccion;
 use App\Models\Operativo;
 use App\Models\Vehiculo;
-use App\Models\Infra_Incum;
-use App\Models\Incumplimiento;
-use App\Models\Infraccions;
 
 class ActaControlador extends Controller
 {
@@ -190,6 +190,7 @@ class ActaControlador extends Controller
             $nuevo_acta->conductor()->associate($b);
         }
 
+
         $nuevo_acta->operativo_id= $id;
         $nuevo_acta->numero= $request->input('acta');
         $nuevo_acta->estado= $request->input('condicion_id');
@@ -201,18 +202,13 @@ class ActaControlador extends Controller
         $nuevo_acta->ruta= $request->input('ruta');
         $nuevo_acta->inspector_id =  $request->input('inspector');
         $nuevo_acta->empresa_id = $request->input('empresas');
-
-        $nuevo_infra_incum = new Infra_Incum;
-        $nuevo_infra_incum->tipo = $request->input('seleccion');
-        $nuevo_infra_incum->infracion_id = $request->input('infraccion');
-        $nuevo_infra_incum->infra_id = $request->input('infra_sub');
-        $nuevo_infra_incum->incumplimiento_id = $request->input('incumplimiento');
-        $nuevo_infra_incum->incum_id = $request->input('incum_sub');
-        $nuevo_infra_incum->save();
-
-        $nuevo_acta->infra_incum()->associate($nuevo_infra_incum);
-
         $nuevo_acta->save();
+
+        $nacta_fracum = new Acta_Fracum();
+        $nacta_fracum->acta_id=$nuevo_acta->id;
+        $nacta_fracum->fracum_id=$request->input('fracumson');
+        $nacta_fracum->save();
+
         return redirect()->back();
     }
 
@@ -238,8 +234,6 @@ class ActaControlador extends Controller
         $upacta->inspector_id =  $request->input('inspector');
 
         $upacta->empresa_id = $request->input('empresas');
-
-        $upacta->infraccion_id = $request->input('infraccion');
 
         $conductor = Conductor::findOrFail($upacta->conductor_id);
 
@@ -268,12 +262,12 @@ class ActaControlador extends Controller
         $inspectores = Inspector::all();
         $empresas = Empresa::all();
         $conductores = Conductor::all();
-        $infracciones = Infraccion::all();
         $vehiculos = Vehiculo::all();
         $pagos = Pago::all();
+        $fracum = Fracum::all();
+        $fracumfather = FracumFather::all();
+        $fracumson = FracumSon::all();
         $actas = Acta::where('operativo_id', $id)->orderBy('updated_at', 'desc')->paginate(5);
-        $infra = Infraccions::all();
-        $incum = Incumplimiento::all();
 
         $operativo = Operativo::find($id);;
         if (!$operativo) {
@@ -285,11 +279,11 @@ class ActaControlador extends Controller
             'inspectores'=>$inspectores,
             'empresas'=>$empresas,
             'conductores'=>$conductores,
-            'infra'=>$infra,
-            'incum'=>$incum,
-            'infracciones'=>$infracciones,
             'vehiculos'=>$vehiculos,
             'pagos'=>$pagos,
+            'fracum'=>$fracum,
+            'fracumfather'=> $fracumfather,
+            'fracumson' => $fracumson,
             'id'=>$id,
             'operativo'=>$operativo
         ]);

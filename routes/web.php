@@ -11,8 +11,8 @@ use App\Http\Controllers\PDFControlador;
 use App\Http\Controllers\PagosControlador;
 use App\Http\Controllers\ResolucionesControlador;
 use App\Http\Controllers\DistritoController;
+use App\Http\Controllers\fracumController;
 use App\Http\Controllers\Controller;
-use App\Http\Controllers\InfraIncumController;
 
 
 
@@ -37,7 +37,7 @@ Route::get('/', function () {
 Route::get('/consulta',[ActaControlador::class,'buscar'])->name('consulta.buscar');
 
 //MOSTRAR INFRACCIONES
-Route::get('/infra_imcum/{data_infrac}', [InfraccionControlador::class, 'showInfraccion'])->name('infraccion.mostrar');
+Route::get('/fracum/{tipo}/{id}', [InfraccionControlador::class, 'showInfraccion'])->name('infraccion.mostrar');
 
 Route::middleware([
     'auth:sanctum',
@@ -96,6 +96,5 @@ Route::middleware([
             Route::get('/placas/{id}', [Controller::class, 'placas']);
 
             Route::get('/provincias/{id}/distritos', [DistritoController::class, 'getDistritos']);
-            Route::get('/infra/{id}', [InfraIncumController::class, 'getInfracciones']);
-            Route::get('/incum/{id}', [InfraIncumController::class, 'getIncumplimientos']);
+            Route::get('/fracum/{id}', [fracumController::class, 'getFracums']);
 });

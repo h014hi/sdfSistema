@@ -159,7 +159,7 @@
                             <th scope="col">TRAMITADOS</th>
                             <th scope="col">PENDIENTES</th>
                             <th scope="col">CON RESOLUCION</th>
-                            <th scope="col">+ DIAS</th>
+                            <th scope="col">DIAS HABILITADOS</th>
                             <th scope="col" style="width: 13em;">ACCIONES</th>
                         </tr>
                 </thead>
@@ -217,7 +217,7 @@
                                 <td><span class="badge bg-success" style="font-size: 120%">{{$archivados}} archivados</span></td>
                                 <td><span class="badge bg-primary" style="font-size: 120%">{{$tramitados}} tramitados</span></td>
                                 <td><span class="badge bg-danger" style="font-size: 120%; color: white; background-color=#fb2d5b;">{{$libre}} pendientes</span></td>
-                                <td><span class="badge bg-secondary" style="font-size: 120%; color: white; ">{{$conrdr}} con RDR</span></td>
+                                <td><span class="badge bg-secondary" style="font-size: 120%; color: white; ">{{$conrdr}} RDR</span></td>
                                 <td>{{$operativo->diashabiles}}</td>
 
                                 <td>

@@ -1,6 +1,6 @@
 <x-guest-layout>
     <head>
-        <title>Infraccion</title>
+        <title>MAS DE MI INFRACCION/INCUMPLIMIENTO</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     </head>
     <body class="container col-md-12">
@@ -11,17 +11,15 @@
         <article class="container">
             <div class="m_container">
                 @php
-                     $w_temp = ($infrac->tipo == 'infraccion') ? 'una' : 'un';
+                     $w_temp = ($tipo == 'infraccion') ? 'una' : 'un';
                 @endphp
 
-                <p class="m_infrac">Usted ha cometido {{$w_temp}} <b>{{ $infrac->tipo }}</b>  tipificada con codigo: <b>{{ $infrac->codigo  }}</b> , puede ver los detalles de su {{$infrac->tipo}} en la siguiente tabla.</p>
-
-                @if ($infrac->tipo == 'infraccion')
-                    <x-z06_infraccion :infrac="$infrac" w_temp="$w_temp"/>
+                <p class="m_infrac">Usted ha cometido {{$w_temp}} <b>{{$tipo}}</b>  tipificada con codigo: <b>{{$fracum->ffather->codigo}} {{$fracum->sub_cod}}</b> , puede ver los detalles de su en la siguiente tabla.</p>
+                @if ($tipo== 'infraccion')
+                    <x-z06_infraccion :fracum="$fracum" w_temp="$w_temp"/>
                 @else
-                    <x-z07_incumplimiento :infrac="$infrac"/>
+                    <x-z07_incumplimiento :fracum="$fracum"/>
                 @endif
-
             </div>
         </article>
 

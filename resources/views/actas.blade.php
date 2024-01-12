@@ -8,7 +8,7 @@
     <div class="py-12">
         <div class="max-w-12xl mx-auto sm:px-12 lg:px-12">
             <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg" style="padding: 10px">
-                <x-acta :operativo="$operativo" :resultados="$resultados" :inspectores="$inspectores" :empresas="$empresas" :conductores="$conductores" :infracciones="$infracciones" :infra="$infra" :incum="$incum" :vehiculos="$vehiculos" :pagos="$pagos" :id="$id"/>
+                <x-acta :operativo="$operativo" :resultados="$resultados" :inspectores="$inspectores" :empresas="$empresas" :conductores="$conductores" :fracumfather="$fracumfather" :fracumson="$fracumson" :fracum="$fracum" :vehiculos="$vehiculos" :pagos="$pagos" :id="$id"/>
             </div>
         </div>
     </div>

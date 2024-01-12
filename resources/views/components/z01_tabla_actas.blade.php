@@ -12,19 +12,34 @@
 
         <tbody>
                 @foreach($resultados as $acta)
-                        <script>
-                                mostrarInfraccion('{{$acta->infraccion->codigo}}','{{$acta->infraccion->descripcion}}','{{$acta->infraccion->consecuencia}}')
-                        </script>
+
                         <tr>
                                 <td>{{$acta->numero}}</td>
                                 <td>{{$acta->operativo->fecha}}</td>
                                 <td>{{$acta->operativo->lugar}}</td>
                                 <td>{{$acta->conductor->nombres}} {{$acta->conductor->apellidos}}</td>
                                 <td>{{$acta->vehiculo->placa}}</td>
-                                <!-- <td><a href="#" onclick="mostrarInfraccion('{{$acta->infraccion->codigo}}','{{$acta->infraccion->descripcion}}','{{$acta->infraccion->consecuencia}}')" id="mInfraccion">{{$acta->infraccion->codigo}}</a></td> -->
-                                <td>{{$acta->infraccion->codigo}}</td>
-                                <td>{{$acta->infraccion->descripcion}}</td>
-                                <td>{{$acta->observacion}}</td>
+
+                                <td>
+                                    @foreach ($acta->fracums as $fracum)
+                                        @foreach ($fracum->fSubCods as $subcod)
+                                            {{ $subcod->fFather->codigo}} {{$subcod->sub_cod}} <br>
+                                        @endforeach
+                                    @endforeach
+                                </td>
+                                <td>
+                                    @foreach ($acta->fracums as $fracum)
+                                        @foreach ($fracum->fSubCods as $subcod)
+                                        {{ $subcod->ffather->detalle}} {{ $subcod->descripcion}}<br>
+                                        @endforeach
+                                    @endforeach
+                                </td>
+                                <td>
+                                    <a href="{{ route('infraccion.mostrar', ['tipo' => $fracum->tipo, 'id' => $subcod->id]) }}"
+                                       class="btn btn-info w-100">
+                                        SABER MÁS...
+                                    </a>
+                                </td>
 
                                 @php
                                         // en caso de paros o huelgas o feriados

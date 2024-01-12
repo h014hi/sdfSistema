@@ -10,7 +10,6 @@ use App\Models\Empresa;
 use App\Models\Inspector;
 use App\Models\Conductor;
 use App\Models\Vehiculo;
-use App\Models\Infraccion;
 use App\Models\Pago;
 use App\Models\Acta;
 
@@ -29,7 +28,6 @@ class DatabaseSeeder extends Seeder
     Inspector::factory(3)->create();
     Conductor::factory(15)->create();
     Vehiculo::factory(15)->create();
-    Infraccion::factory(10)->create();
     Pago::factory(15)->create();
 	Acta::factory(15)->create();
 

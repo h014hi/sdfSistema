@@ -20,7 +20,7 @@ class InspectorFactory extends Factory
             //
         'nombres'=> $this->faker->randomElement(["Juan","Jorge","Julian"]),
         'apellidos'=> $this->faker->realText(20),
-        'telefono'=>$this->faker->randomElement(["SI"]),
+        'acreditado'=>$this->faker->randomElement(["SI"]),
         ];
     }
 }

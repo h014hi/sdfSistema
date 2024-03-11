@@ -12,6 +12,7 @@ use App\Http\Controllers\PagosControlador;
 use App\Http\Controllers\ResolucionesControlador;
 use App\Http\Controllers\DistritoController;
 use App\Http\Controllers\fracumController;
+use App\Http\Controllers\UitControlador;
 use App\Http\Controllers\Controller;
 
 
@@ -35,6 +36,9 @@ Route::get('/', function () {
 
 //consulta con especificaciones
 Route::get('/consulta',[ActaControlador::class,'buscar'])->name('consulta.buscar');
+//Consulta Resolucion
+Route::get('/rdrview',[ResolucionesControlador::class,'view'])->name('consultardr.view');
+Route::get('/consultardr',[ResolucionesControlador::class,'buscar'])->name('consultardr.buscar');
 
 //MOSTRAR INFRACCIONES
 Route::get('/fracum/{tipo}/{id}', [InfraccionControlador::class, 'showInfraccion'])->name('infraccion.mostrar');
@@ -55,29 +59,29 @@ Route::middleware([
     Route::get('/graficos', [PDFControlador::class,'mostrarGrafico'])->name('grafico');
 
             //OPERATIVOS
-            Route::get('/registraroperativo',[OperativoControlador::class,'create'])->name('registrar.operativo');
+            Route::post('/registraroperativo',[OperativoControlador::class,'create'])->name('registrar.operativo');
             Route::post('/operativo/{id}', [OperativoControlador::class, 'update'])->name('operativo.update');
             Route::delete('/operativo/{id}', [OperativoControlador::class, 'destroy'])->name('operativo.destroy');
             Route::get('/actas/{id}', [ActaControlador::class,'show'])->name('actasdeloperativo');
 
             //INSPECTORES Y EMPRESAS
-            Route::get('/guardar-datos',[InspectorControlador::class,'store'])->name('guardar-datos');
-            Route::get('/guardar-empresas',[EmpresasControlador::class,'store'])->name('guardar-empresas');
-            Route::get('/inspectores/{id}', [InspectorControlador::class, 'update'])->name('inspector.update');
+            Route::post('/guardar-datos',[InspectorControlador::class,'store'])->name('guardar-datos');
+            Route::post('/guardar-empresas',[EmpresasControlador::class,'store'])->name('guardar-empresas');
+            Route::post('/inspectores/{id}', [InspectorControlador::class, 'update'])->name('inspector.update');
             Route::delete('/inspectores/{id}', [InspectorControlador::class, 'destroy'])->name('inspector.destroy');
-            Route::get('/empresas/{id}', [EmpresasControlador::class,'update'])->name('empresa.update');
+            Route::post('/empresas/{id}', [EmpresasControlador::class,'update'])->name('empresa.update');
             Route::delete('/empresas/{id}', [EmpresasControlador::class, 'destroy'])->name('empresa.destroy');
 
             //PAGOS ACCIONES
-            Route::get('/registrarpago',[PagosControlador::class,'create'])->name('registrar.pago');
+            Route::post('/registrarpago',[PagosControlador::class,'create'])->name('registrar.pago');
             Route::post('/pagos/{id}', [PagosControlador::class, 'update'])->name('pago.update');
             Route::delete('/pagos/{id}', [PagosControlador::class, 'destroy'])->name('pago.destroy');
 
             //ACTA ACCIONES
-            Route::get('/guardar-actas/{id}',[ActaControlador::class,'guardaracta'])->name('guardar.actas');
+            Route::post('/guardar-actas/{id}',[ActaControlador::class,'guardaracta'])->name('guardar.actas');
             Route::post('/actaseditar/{id}', [ActaControlador::class, 'editaracta'])->name('acta.update');
             Route::delete('/acta/{id}', [ActaControlador::class, 'destroy'])->name('acta.destroy');
-
+            Route::get('/consultar-dni', [ActaControlador::class, 'consultarDni'])->name('acta.consultardni');
 
 
             //PDF GENERAR PRUEBA
@@ -86,9 +90,14 @@ Route::middleware([
             Route::get('/ifiactas/{id}', [PDFControlador::class, 'generarDocumento'])->name('ifi');
 
             //RESOLUCIONES
-            Route::get('/registrarresolucion',[ResolucionesControlador::class,'create'])->name('registrar.resolucion');
+            Route::post('/registrarresolucion',[ResolucionesControlador::class,'create'])->name('registrar.resolucion');
             Route::post('/resolucion/{id}', [ResolucionesControlador::class, 'update'])->name('resolucion.update');
             Route::delete('/resolucion/{id}', [ResolucionesControlador::class, 'destroy'])->name('resolucion.destroy');
+
+            //UIT
+            Route::post('/uit',[UitControlador::class,'create'])->name('registrar.uit');
+            Route::post('/uit/{id}', [UitControlador::class, 'update'])->name('editar.uit');
+
 
             //AUTOAPI APIS SIMPLES
             Route::get('/empresasreport', [Controller::class, 'empresas']);

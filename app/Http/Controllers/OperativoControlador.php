@@ -30,14 +30,16 @@ class OperativoControlador extends Controller
      */
     public function create(Request $request)
     {
+
         $nuevo_operativo = new Operativo;
         $nuevo_operativo->lugar= $request->input('lugar');
         $nuevo_operativo->provincia = $request->input('provincia');
         $nuevo_operativo->distrito = $request->input('distrito');
         $nuevo_operativo->fecha= $request->input('fecha');
-        $nuevo_operativo->tipo = $request->input('inputGroupSelect01');
-        $nuevo_operativo->diashabiles= $request->input('dias');;
+        $nuevo_operativo->tipo = $request->input('tipo_operativo');
+        $nuevo_operativo->diashabiles= $request->input('dias');
         $nuevo_operativo->save();
+
         return redirect()->back();
     }
 
@@ -46,7 +48,7 @@ class OperativoControlador extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //s
     }
 
     /**
@@ -70,28 +72,18 @@ class OperativoControlador extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
-        $request->validate([
-            'lugar' => 'required',
-            'fecha' => 'required',
-        ]);
 
-        // Obtener el operativo a actualizar
         $operativo = Operativo::findOrFail($id);
 
-        // Actualizar los datos del operativo
-        $operativo->lugar = $request->input('lugar');
-        $operativo->provincia = $request->input('provincia');
-        $operativo->distrito = $request->input('distrito');
-        $operativo->fecha = $request->input('fecha');
-        $operativo->tipo = $request->input('inputGroupSelect01');
-        $operativo->diashabiles = $request->input('dias');
-        // Actualizar otros campos según sea necesario
+        $operativo->tipo = $request->input('tipo_operativo_edit');
+        $operativo->lugar = $request->input('lugar_edit');
+        $operativo->provincia = $request->input('provincia_edit');
+        $operativo->distrito = $request->input('distrito_edit');
+        $operativo->fecha = $request->input('fecha_edit');
+        $operativo->diashabiles = $request->input('numero_edit');
 
-        // Guardar los cambios en la base de datos
         $operativo->save();
 
-        // Redireccionar a la página o realizar alguna acción adicional
         return redirect()->back();
     }
 

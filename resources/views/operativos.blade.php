@@ -3,7 +3,6 @@
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('REGISTRO DE OPERATIVOS') }}
         </h2>
-        <!-- Librería de JavaScript de Bootstrap -->
     </x-slot>
 
     <div class="py-12">

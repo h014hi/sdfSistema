@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('actas', function (Blueprint $table) {
             $table->id();
-
-            $table->string('estado',150)->nullable(false);
-            $table->string('agente',30)->nullable(true);
             $table->string('numero',150)->nullable(false);
-
+            $table->string('agente',30)->nullable(true);
             $table->text('retencion');
             $table->string('ruta')->nullable(true);
+
+            $table->string('estadoanterior',150)->nullable(true);
+            $table->string('estado',150)->nullable(false);
 
             $table->text('obs_intervenido')->nullable(true);
             $table->text('obs_inspector')->nullable(true);
@@ -27,23 +27,23 @@ return new class extends Migration
 
             // relación con operativos
             $table->unsignedBigInteger('operativo_id')->nullable();
-            $table->foreign('operativo_id')->references('id')->on('operativos')->onDelete('set null');
+            $table->foreign('operativo_id')->references('id')->on('operativos')->onDelete('cascade');
 
             // relacion con empresas
-            $table->unsignedBigInteger('empresa_id')->nullable();
+            $table->unsignedBigInteger('empresa_id')->nullable(true);
             $table->foreign('empresa_id')->references('id')->on('empresas')->onDelete('set null');
 
             // relacion con inspectores
-            $table->unsignedBigInteger('inspector_id')->nullable();
+            $table->unsignedBigInteger('inspector_id')->nullable(true);
             $table->foreign('inspector_id')->references('id')->on('inspectors')->onDelete('set null');
 
             //relacion con conductores
-            $table->unsignedBigInteger('conductor_id')->nullable();
-            $table->foreign('conductor_id')->references('id')->on('conductors')->onDelete('set null');
+            $table->unsignedBigInteger('conductor_id')->nullable(false);
+            $table->foreign('conductor_id')->references('id')->on('conductors')->onDelete('cascade');
 
             //relacion con vehiculos intervenidos
-            $table->unsignedBigInteger('vehiculo_id')->nullable();
-            $table->foreign('vehiculo_id')->references('id')->on('vehiculos')->onDelete('set null');
+            $table->unsignedBigInteger('vehiculo_id')->nullable(true);
+            $table->foreign('vehiculo_id')->references('id')->on('vehiculos')->onDelete('cascade');
 
             $table->timestamps();
         });

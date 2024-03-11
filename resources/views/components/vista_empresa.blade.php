@@ -1,154 +1,38 @@
-
-<!--BOTONES DE ACCIONAR REGISTRAR GENERAR PDF GENERAR EXCEL-->
-    <div class="col-md-12">
-
-        <!-- Botón o enlace que abre el modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" style="background-color: #187BEC; margin: 10px 10px 10px -15px;">
-         Registrar Empresa
-        </button>
-
-
-        <!-- Modal -->
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" >
-            <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-dialog-custom modal-xl" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">REGISTRAR EMPRESAS</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
-
-            <div class="modal-body">
-                <form id="formulario" action="{{ route('guardar-empresas') }}" method="GET">
-                    @csrf
-                <fieldset>
-                    <legend>Datos de la Empresa</legend>
-                    <div class="space-y-3 mb-4">
-                        <h2 class="font-bold"></h2>
-                                <div class="space-y-3">
-                                    <div class="space-y-3 mb-4">
-                                        <div class="space-x-3 flex justify-between">
-                                            <div class="flex-1 space-y-3">
-                                                <label for="">Razon Social</label>
-                                                <input type="text" name="razon_social" id="razon_social"
-                                                    class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                    placeholder="Ingrese la razon social">
-                                            </div>
-                                            <div class="flex-1 space-y-3">
-                                                <label for="">RUC</label>
-                                                <input type="text" name="ruc" id="ruc"
-                                                    class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                    placeholder="Ingrese la RUC">
-                                            </div>
-                                        </div>
-                                        <div class="space-x-3 flex justify-between">
-                                            <div class="flex-1 space-y-3">
-                                                <label for="">Resolucion de Funcionamiento</label>
-                                                <input type="text" name="res_funcionamiento" id="res_funcionamiento"
-                                                    class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                    placeholder="Ingrese el numero de resolucion">
-                                            </div>
-                                            <div class="flex-1 space-y-3">
-                                                <label for="">N° Partida Electronica</label>
-                                                <input type="text" name="partida_electronica" id="partida_electronica"
-                                                    class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                                    placeholder="Ingrese N° de partida electronica">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                    </div>
-                </fieldset>
-
-                <fieldset>
-                    <legend>Datos del representante legal</legend>
-                    <div class="space-y-3 mb-4">
-                    <div class="space-x-3 flex justify-between">
-                        <div class="flex-1 space-y-3">
-                                <label for="">DNI</label>
-                                <input type="text" name="dni_rep_legal" id="dni_rep_legal"
-                                    class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Ingrese el DNI">
-                            </div>
-                            <div class="flex-1 space-y-3">
-                                <label for="">Nombres</label>
-                                <input type="text" name="nombres_rep_legal" id="nombres_rep_legal"
-                                    class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Ingrese los nombres">
-                            </div>
-                            <div class="flex-1 space-y-3">
-                                <label for="">Apellidos</label>
-                                <input type="text" name="apellidos_rep_legal" id="apellidos_rep_legal"
-                                    class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Ingrese los apellidos">
-                            </div>
-                        </div>
-                    </div>
-                </fieldset>
-
-                <fieldset>
-                    <legend>Otros Datos</legend>
-                    <div class="space-y-3 mb-4">
-                        <div class="space-x-3 flex justify-between">
-                                <div class="flex-1 space-y-3">
-                                    <label for="">Celular</label>
-                                    <input type="text" name="numero_celular" id="numero_celular"
-                                        class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        placeholder="Ingrese el celular">
-                                </div>
-                                <div class="flex-1 space-y-3">
-                                    <label for="">Domicilio</label>
-                                    <input type="text" name="domicilio" id="domicilio"
-                                        class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                        placeholder="Ingrese el domicilio">
-                                </div>
-                            </div>
-                        </div>
-                </fieldset>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-warning" data-dismiss="modal" style = "background-color: #EC7518; color:white;">Cerrar</button>
-                            <button type="submit" class="btn btn-primary" style = "background-color: #187BEC;" >Guardar</button>
-                        </div>
-                    </div>
-        </form>
-        </div>
-        </div>
-    </div>
-    </div>
+@include('includes.modalEmpresas')
+<div class="col-md-12">
+    <!-- Botón o enlace que abre el modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalRegistrarEmpresas" style="background-color: #187BEC; margin: 10px 10px 10px -15px;">
+        Registrar Empresa
+    </button>
+</div>
 
 <div class="table-responsive">
-<table class="table" style="font-size: 75%; text-align: center;">
+    <table class="table" style="font-size: 75%; text-align: center;">
 
-    <!--CABECERA-->
-    <thead class="thead-dark">
-        <tr>
-            <th scope="col" rowspan="2">Item</th>
-            <th scope="col" rowspan="2">RUC</th>
-            <th scope="col" rowspan="2">RAZON SOCIAL</th>
-            <th scope="col" rowspan="2">N° RESOLUCION DE FUNCIONAMIENTO</th>
-            <th scope="col" rowspan="2">N° PARTIDA ELECTRONICA</th>
-            <th scope="col" colspan="3">DATOS DEL GERENTE DE LA EMPRESA</th>
-            <th></th>
-            <th scope="col" rowspan="2">DOMICILIO LEGAL</th>
-            <th scope="col" rowspan="2">ACCIONES</th>
-        </tr>
-        <tr>
-            <!-- Subheaders for the grouped columns with colspan to cover the merged cells -->
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col" rowspan="2">Item</th>
+                <th scope="col" rowspan="2">RUC</th>
+                <th scope="col" rowspan="2">RAZON SOCIAL</th>
+                <th scope="col" rowspan="2">N° RESOLUCION DE FUNCIONAMIENTO</th>
+                <th scope="col" rowspan="2">N° PARTIDA ELECTRONICA</th>
+                <th scope="col" colspan="3">DATOS DEL GERENTE DE LA EMPRESA</th>
+                <th></th>
+                <th scope="col" rowspan="2">DOMICILIO LEGAL</th>
+                <th scope="col" rowspan="2">ACCIONES</th>
+            </tr>
+            <tr>
+                <!-- Subheaders for the grouped columns with colspan to cover the merged cells -->
 
-            <th scope="col">NOMBRES</th>
-            <th scope="col">APELLIDOS</th>
-            <th scope="col">DNI</th>
-            <th scope="col">CELULAR</th>
-            <!-- Additional columns if needed -->
-        </tr>
-    </thead>
+                <th scope="col">NOMBRES</th>
+                <th scope="col">APELLIDOS</th>
+                <th scope="col">DNI</th>
+                <th scope="col">CELULAR</th>
+                <!-- Additional columns if needed -->
+            </tr>
+        </thead>
 
-    @props(['resultados'])
-
-    <!--CUERPO-->
-    <tbody>
+        <tbody>
             @foreach($resultados as $index=>$empresa)
                     <tr>
                     <td>{{$index + 1 }}</td>
@@ -163,7 +47,7 @@
                     <td>{{$empresa->domicilio}}</td>
                     <td>
                         <!-- Update button-->
-                        <a class="btn btn-warning" data-toggle="modal" data-target="#ModalEdit" onclick="editar_empresa(
+                        <a class="btn btn-warning" data-toggle="modal" data-target="#modalEditarEmpresas" onclick="editar_empresa(
                             {{json_encode($empresa->id)}},
                             {{json_encode($empresa->razon_social)}},
                             {{json_encode($empresa->ruc)}},
@@ -191,114 +75,10 @@
                     </td>
                     </tr>
             @endforeach
-    </tbody>
-</table>
+        </tbody>
+    </table>
 
-<div class="col-md-12">{{$resultados->links()}}</div>
-
-</div>
-
-
-<div class="modal fade" id="ModalEdit" tabindex="-1" role="dialog" >
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-dialog-custom modal-xl" role="document">
-    <div class="modal-content">
-    <div class="modal-header">
-        <h4 class="modal-title" id="myModalLabel">Editar Empresas</h4>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="modal-body">
-        <form id="formularioid" action="" method="">
-            @csrf
-      <div class="space-y-3 mb-4">
-       <h2 class="font-bold"></h2>
-            <div class="space-y-3">
-                <div class="space-y-3 mb-4">
-                    <h2 class="font-bold">Datos de la Empresa</h2>
-                <div class="space-x-3 flex justify-between">
-                    <div class="flex-1 space-y-3">
-                            <label for="">Razon Social</label>
-                            <input type="text" name="razon_social" id="razon_socialedit" value=""
-                                class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Ingrese la Provincia">
-                        </div>
-                        <div class="flex-1 space-y-3">
-                            <label for="">RUC</label>
-                            <input type="text" name="ruc" id="rucedit" value=""
-                                class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                placeholder="Ingrese su Correo Institucional">
-                        </div>
-                    </div>
-                    <div class="space-x-3 flex justify-between">
-                        <div class="flex-1 space-y-3">
-                                <label for="">esolucion de Funcionamiento</label>
-                                <input type="text" name="res_funcionamiento" id="res_funcionamientoedit" value=""
-                                    class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Ingrese el N° de Resolucion">
-                            </div>
-                            <div class="flex-1 space-y-3">
-                                <label for="">Partida Electronica</label>
-                                <input type="text" name="partida_electronica" id="partida_electronicaedit" value=""
-                                    class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                    placeholder="Ingrese N° de partida electronica">
-                            </div>
-                        </div>
-                    </div>
-            </div>
-</div>
-
-
-<div class="space-y-3 mb-4">
-<h2 class="font-bold">Datos del representante legal</h2>
-<div class="space-x-3 flex justify-between">
-
-        <div class="flex-1 space-y-3">
-            <label for="">Nombres</label>
-            <input type="text" name="nombres_rep_legal" id="nombres_rep_legaledit" value=""
-                class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Ingrese su Correo Institucional">
-        </div>
-        <div class="flex-1 space-y-3">
-            <label for="">Apellidos</label>
-            <input type="text" name="apellidos_rep_legal" id="apellidos_rep_legaledit" value=""
-                class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                >
-        </div>
-      <div class="flex-1 space-y-3">
-            <label for="">DNI</label>
-            <input type="text" name="dni_rep_legal" id="dni_rep_legaledit"
-                class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                placeholder="Ingrese la Provincia">
-        </div>
-
-    </div>
-</div>
-<div class="space-y-3 mb-4">
-    <h2 class="font-bold">Otros Datos</h2>
-    <div class="space-x-3 flex justify-between">
-            <div class="flex-1 space-y-3">
-                <label for="">Telefono</label>
-                <input type="text" name="numero_celular" id="numero_celularedit" value=""
-                    class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Ingrese su Correo Institucional">
-            </div>
-            <div class="flex-1 space-y-3">
-                <label for="">Domicilio</label>
-                <input type="text" name="domicilio" id="domicilioedit"
-                    class="bg-gray-50 border outline-none border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Ingrese su Correo Institucional" value="">
-            </div>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <button type="button" class="btn btn-warning" data-dismiss="modal" style = "background-color: #EC7518; color:white;">Cerrar</button>
-        <button type="submit" class="btn btn-primary" style = "background-color: #187BEC;" >Guardar</button>
-    </div>
-    </div>
-</form>
-</div>
-</div>
+    <div class="col-md-12">{{$resultados->links()}}</div>
 </div>
 
 <script>

@@ -33,14 +33,17 @@ class InspectorControlador extends Controller
         $request->validate([
             'nombres' => 'required',
             'apellidos' => 'required',
-            'telefono' => 'required',
+            'acreditado' => 'required',
         ]);
 
         // Crear un nuevo usuario
         $usuario = new Inspector();
         $usuario->nombres = $request->input('nombres');
         $usuario->apellidos = $request->input('apellidos');
+        $usuario->dni = $request->input('inspecdni');
         $usuario->telefono = $request->input('telefono');
+        $usuario->rdrauto = $request->input('rdrauto');
+        $usuario->acreditado = $request->input('acreditado');
         $usuario->save();
 
         // Puedes devolver una respuesta adecuada, como un mensaje de éxito
@@ -80,7 +83,10 @@ class InspectorControlador extends Controller
         // Actualizar los datos del operativo
         $inspec->nombres = $request->input('nombres');
         $inspec->apellidos = $request->input('apellidos');
+        $inspec->dni = $request->input('inspecdni');
         $inspec->telefono = $request->input('telefono');
+        $inspec->rdrauto = $request->input('rdrauto');
+        $inspec->acreditado = $request->input('acreditado');
         // Actualizar otros campos según sea necesario
 
         // Guardar los cambios en la base de datos

@@ -1,101 +1,61 @@
 @props(['resultados'])
+<!--CUERPO-->
 
+<tbody>
+    @foreach($resultados as $acta)
+        <tr>
+            <td>{{$acta->numero}}</td>
+            <td>{{$acta->operativo->fecha}}</td>
+            <td>{{$acta->operativo->lugar}}</td>
+            <td>{{$acta->conductor->nombres}} {{$acta->conductor->apellidos}}</td>
+            <td>{{$acta->vehiculo->placa}}</td>
 
-@php
-        function esFinDeSemana($fecha) {
-          $diaSemana = date('N', strtotime($fecha)); // 1 (lunes) a 7 (domingo)
-          return ($diaSemana == 6 || $diaSemana == 7);
-        }
-@endphp
+            @foreach ($acta->fracums as $fracum)
+                @if ($fracum->tipo == "incumplimiento")
+                    @foreach ($fracum->fSubCods as $subcod)
+                        <td> {{ $subcod->fFather->codigo}} <br> ({{$fracum->tipo}}) </td>
+                        <td>{{ $subcod->ffather->detalle}} </td>
+                    @endforeach
+                @elseif ($fracum->tipo == "infraccion")
+                    @foreach ($fracum->fSubCods as $subcod)
+                        <td>{{ $subcod->fFather->codigo}} {{$subcod->sub_cod}} <br> ({{$fracum->tipo}})</td>
+                        <td>{{ $subcod->ffather->detalle}} <br> {{ $subcod->descripcion}}</td>
+                    @endforeach
+                @endif
+            <td>
+                <a href="{{ route('infraccion.mostrar', ['tipo' => $fracum->tipo, 'id' => $subcod->id]) }}"
+                    class="btn btn-info w-100">
+                    Saber mas...
+                </a>
+            </td>
+            @endforeach
 
-        <!--CUERPO-->
+            @php
+                // en caso de paros o huelgas o feriados
+                $dias_aumentados = $acta->operativo->diashabiles;
+                $nuevaFecha = date('Y-m-d', strtotime($acta->operativo->fecha . ' + ' . strval($dias_aumentados) . ' days'));
+                $nuevaFecha = date('Y-m-d', strtotime($nuevaFecha . ' + 5 days'));
 
-        <tbody>
-                @foreach($resultados as $acta)
+                // en caso de sabados y domingos
+                $sabados_domingos = 0;
+                $fechaActual = date('Y-m-d', strtotime($acta->operativo->fecha . ' + 0 days'));
 
-                        <tr>
-                                <td>{{$acta->numero}}</td>
-                                <td>{{$acta->operativo->fecha}}</td>
-                                <td>{{$acta->operativo->lugar}}</td>
-                                <td>{{$acta->conductor->nombres}} {{$acta->conductor->apellidos}}</td>
-                                <td>{{$acta->vehiculo->placa}}</td>
+                //contando cuantos sabados y domingos hay para sumarlos
+                while ($fechaActual <= $nuevaFecha) {
+                        $diaSemana = date('N', strtotime($fechaActual));
+                        if ($diaSemana == 6 || $diaSemana == 7) {
+                                $sabados_domingos++;
+                        }
+                        $fechaActual = date('Y-m-d', strtotime($fechaActual . ' + 1 days'));
+                }
 
-                                <td>
-                                    @foreach ($acta->fracums as $fracum)
-                                        @foreach ($fracum->fSubCods as $subcod)
-                                            {{ $subcod->fFather->codigo}} {{$subcod->sub_cod}} <br>
-                                        @endforeach
-                                    @endforeach
-                                </td>
-                                <td>
-                                    @foreach ($acta->fracums as $fracum)
-                                        @foreach ($fracum->fSubCods as $subcod)
-                                        {{ $subcod->ffather->detalle}} {{ $subcod->descripcion}}<br>
-                                        @endforeach
-                                    @endforeach
-                                </td>
-                                <td>
-                                    <a href="{{ route('infraccion.mostrar', ['tipo' => $fracum->tipo, 'id' => $subcod->id]) }}"
-                                       class="btn btn-info w-100">
-                                        SABER MÁS...
-                                    </a>
-                                </td>
+                $nuevaFecha = date('Y-m-d', strtotime($nuevaFecha . ' + ' . strval($sabados_domingos) . ' days'));
 
-                                @php
-                                        // en caso de paros o huelgas o feriados
+                $fechaHoy = date('Y-m-d');
 
-                                        $dias_aumentados = $acta->operativo->diashabiles;
-                                        $nuevaFecha = date('Y-m-d', strtotime($acta->operativo->fecha . ' + ' . strval($dias_aumentados) . ' days'));
-                                        $nuevaFecha = date('Y-m-d', strtotime($nuevaFecha . ' + 5 days'));
+            @endphp
 
-                                        // en caso de sabados y domingos
-                                        $sabados_domingos = 0;
-                                        $fechaActual = date('Y-m-d', strtotime($acta->operativo->fecha . ' + 0 days'));
-
-                                        //contando cuantos sabados y domingos hay para sumarlos
-                                        while ($fechaActual <= $nuevaFecha) {
-                                                $diaSemana = date('N', strtotime($fechaActual));
-                                                if ($diaSemana == 6 || $diaSemana == 7) {
-                                                        $sabados_domingos++;
-                                                }
-                                                $fechaActual = date('Y-m-d', strtotime($fechaActual . ' + 1 days'));
-                                        }
-
-                                        $nuevaFecha = date('Y-m-d', strtotime($nuevaFecha . ' + ' . strval($sabados_domingos) . ' days'));
-
-                                        $fechaHoy = date('Y-m-d');
-
-                                @endphp
-
-
-                                        @if($acta->estado == "ARCHIVADO")
-                                                <td > <div style="color: white; background-color: #89f13a; padding: 1em;"><b>Archivado PAS</b></div></td>
-                                        @else
-                                                @if($acta->estado == "TRAMITADO")
-                                                        <td>  <div style="color: black; background-color: yellow; padding: 1em;"><b>Tramitado</b></div></td>
-                                                @else
-                                                        @if($acta->estado == "CONDESCARGO")
-                                                                <td>  <div style="color: white; background-color: #3ac7f1; padding: 1em;"><b>Pendiente de tramite</b></div></td>
-                                                        @else
-                                                                @if($acta->infraccion->tipo == "INFRACCION")
-                                                                        @if($fechaHoy > $nuevaFecha)
-                                                                        <td><div style="color: black; background-color: #f53838; padding: 1em;"><b>Para su Tramite</b></div></td>
-                                                                        @else
-                                                                        <td> <div style="color: white; background-color: orange; padding: 1em;"><b>Dentro del plazo para Pago y/o Descargo</b></div></td>
-                                                                        @endif
-                                                                @else
-                                                                        @if($fechaHoy > $nuevaFecha)
-                                                                        <td>  <div style="color: white; background-color: #f53838; padding: 1em;"><b>Para su Tramite</b></div></td>
-                                                                        @else
-                                                                        <td> <div style="color: white; background-color: orange; padding: 1em;"><b>Dentro del plazo para Descargo</b></div></td>
-                                                                        @endif
-                                                                @endif
-                                                        @endif
-                                                @endif
-                                        @endif
-
-                        </tr>
-                @endforeach
-
-
-        </tbody>
+            @include('includes.estadoActas')
+        </tr>
+    @endforeach
+</tbody>

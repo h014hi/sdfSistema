@@ -42,5 +42,9 @@ class Acta extends Model
 		return $this->belongsToMany(Fracum::class)->with('fSubCods');;
 	}
 
+    public function resolucion()
+    {
+        return $this->hasOne(Resolucion::class);
+    }
     use HasFactory;
 }

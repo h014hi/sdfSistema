@@ -14,9 +14,38 @@ use App\Models\FracumSon;
 use App\Models\Pago;
 use App\Models\Operativo;
 use App\Models\Vehiculo;
+use GuzzleHttp\Client;
 
 class ActaControlador extends Controller
 {
+    /* API DNI*/
+    private static $api_token = 'apis-token-7618.6kqlzDgINL1r2PdJmCVflCwqndnnmWcb';
+    /**token temporal maximas solicitudes por mes 1000 gratis mas de eso se debe de pagar */
+    private static $base_url = 'https://api.apis.net.pe';
+
+    public function consultarDni(Request $request)
+    {
+        $dni = $request->input('dni');
+
+        $client = new Client([
+            'base_uri' => self::$base_url,
+            'verify' => false,
+        ]);
+
+        $response = $client->request('GET', '/v2/reniec/dni', [
+            'query' => ['numero' => $dni],
+            'headers' => [
+                'Referer' => 'https://apis.net.pe/consulta-dni-api',
+                'Authorization' => 'Bearer ' . self::$api_token,
+            ],
+        ]);
+
+        $persona = json_decode($response->getBody()->getContents());
+
+        return response()->json($persona);
+    }
+
+    /** **************************/
 
     public function index()
     {
@@ -150,8 +179,8 @@ class ActaControlador extends Controller
 
         $nuevo_acta = new Acta;
 
-        $letraLicencia = $request->input('Letral');
-        $dni = $request->input('dni');
+        $letraLicencia = $request->input('Letralic');
+        $dni = $request->input('n_documento');
         $licencia = $letraLicencia . $dni;
 
         $vehiculo = Vehiculo::where('placa',$request->input('placa'))->first();
@@ -170,7 +199,7 @@ class ActaControlador extends Controller
 
         }
 
-        $conductor = Conductor::where('dni',$request->input('dni'))->first();
+        $conductor = Conductor::where('dni',$dni)->first();
         if($conductor)
         {
             $nuevo_acta->conductor()->associate($conductor);
@@ -178,7 +207,7 @@ class ActaControlador extends Controller
         else
         {
             $nuevo_conductor = new Conductor;
-            $nuevo_conductor->dni = $request->input('dni');
+            $nuevo_conductor->dni = $dni;
 
             $nuevo_conductor->nombres = $request->input('nombres');
             $nuevo_conductor->apellidos = $request->input('apellidos');
@@ -186,7 +215,7 @@ class ActaControlador extends Controller
             $nuevo_conductor->categoria= $request->input('categoria');
             $nuevo_conductor->estadolicencia= $request->input('estadol');
             $nuevo_conductor->save();
-            $b = Conductor::where('dni',$request->input('dni'))->first();
+            $b = Conductor::where('dni',$dni)->first();
             $nuevo_acta->conductor()->associate($b);
         }
 
@@ -202,6 +231,7 @@ class ActaControlador extends Controller
         $nuevo_acta->ruta= $request->input('ruta');
         $nuevo_acta->inspector_id =  $request->input('inspector');
         $nuevo_acta->empresa_id = $request->input('empresas');
+        $nuevo_acta->estadoanterior = 'registrado';
         $nuevo_acta->save();
 
         $nacta_fracum = new Acta_Fracum();
@@ -215,38 +245,40 @@ class ActaControlador extends Controller
 
     public function editaracta(Request $request, string $id)
     {
-        $letraLicencia = $request->input('Letral');
-        $dni = $request->input('dni');
-        $licencia = $letraLicencia . $dni;
+
+        $dni = $request->input('dniedit');
         // Crear un nuevo usuario
         $upacta = Acta::findOrFail($id);
-        $upacta->numero= $request->input('acta');
+        $upacta->numero= $request->input('actaedit');
+
+        $upacta->estadoanterior = $upacta->estado;
         $upacta->estado= $request->input('condicion_id');
-        $upacta->agente= $request->input('agente_infrac');
-        $upacta->obs_intervenido = $request->input('obs_intervenido');
-        $upacta->obs_inspector = $request->input('obs_inspector');
-        $upacta->obs_acta = $request->input('obs_acta');
-        $upacta->retencion= $request->input('retencion');
-        $upacta->ruta= $request->input('ruta');
+
+        $upacta->agente= $request->input('agente_infrac_edit');
+        $upacta->obs_intervenido = $request->input('obs_intervenidoedit');
+        $upacta->obs_inspector = $request->input('obs_inspectoredit');
+        $upacta->obs_acta = $request->input('obs_actaedit');
+        $upacta->retencion= $request->input('retencionedit');
+        $upacta->ruta= $request->input('rutaedit');
 
 
-        //actualizar inspector
-        $upacta->inspector_id =  $request->input('inspector');
+        $upacta->inspector_id =  $request->input('inspectoredit');
 
-        $upacta->empresa_id = $request->input('empresas');
+        $upacta->empresa_id = $request->input('empresaedit');
 
         $conductor = Conductor::findOrFail($upacta->conductor_id);
 
-        $conductor->dni = $request->input('dni');
-        $conductor->nombres = $request->input('nombres');
-        $conductor->apellidos = $request->input('apellidos');
-        $conductor->licencia = $licencia; // aqui esta con guion sin guion xd
-        $conductor->categoria= $request->input('categoria');
-        $conductor->estadolicencia= $request->input('estadol');
+        $conductor->dni = $request->input('dniedit');
+        $conductor->nombres = $request->input('nombresedit');
+        $conductor->apellidos = $request->input('apellidosedit');
+        $conductor->licencia = $request->input('licenciaedit'); // aqui esta con guion sin guion xd
+        $conductor->categoria= $request->input('categoriaedit');
+
+        $conductor->estadolicencia= $request->input('estadoedit');
         $conductor->save();
 
         $vehiculo = Vehiculo::findOrFail($upacta->vehiculo_id);
-        $vehiculo->placa = $request->input('placa');
+        $vehiculo->placa = $request->input('placaedit');
         $vehiculo->save();
 
         $upacta->save();
@@ -267,9 +299,16 @@ class ActaControlador extends Controller
         $fracum = Fracum::all();
         $fracumfather = FracumFather::all();
         $fracumson = FracumSon::all();
-        $actas = Acta::where('operativo_id', $id)->orderBy('updated_at', 'desc')->paginate(5);
+        $actas = Acta::where('operativo_id', $id)->orderBy('updated_at', 'desc')->paginate(10);
 
-        $operativo = Operativo::find($id);;
+        $operativo = Operativo::find($id);
+
+        $actas2 = Acta::where('operativo_id', $id)->get();
+
+        // Contar la cantidad total de actas asociadas al operativo
+        $cantidadactas = $actas2->count();
+
+
         if (!$operativo) {
             // Manejar el caso en que no se encuentra el operativo
             abort(404, 'Operativo no encontrado');
@@ -285,7 +324,8 @@ class ActaControlador extends Controller
             'fracumfather'=> $fracumfather,
             'fracumson' => $fracumson,
             'id'=>$id,
-            'operativo'=>$operativo
+            'operativo'=>$operativo,
+            'cantidadactas' => $cantidadactas
         ]);
     }
 

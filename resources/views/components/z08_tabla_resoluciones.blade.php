@@ -1,163 +1,34 @@
+@include('includes.modalResoluciones')
 <div class="col-md-12">
-
-        <!-- Botón o enlace que abre el modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" style="background-color: #187BEC; margin: 10px 10px 10px -15px;">
-            Nueva Resolucion
-        </button>
-
-
-        <!-- Modal to create -->
-        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" >
-                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-dialog-custom modal-xl" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header" style="background-color: rgb(214 224 27);">
-                            <h4 class="modal-title" id="myModalLabel" ><b>CREACIÓN DE NUEVA RESOLUCION</b></h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-
-
-                        <form action="{{route('registrar.resolucion')}}" method="GET">
-                        <div class="modal-body">
-
-                                <div class="form-group">
-                                    <div class="input-group mb-3">
-                                    <label for="">N° de Acta:</label>
-                                            <select name="acta" value="" id="acta" required
-                                                class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:focus:border-blue-500" required>
-                                                <option value="">Seleccione..</option>
-                                                @foreach ($actas as $acta)
-                                                    @if($acta->estado == "CONDESCARGO" || $acta->estado != "ARCHIVADO")
-                                                    @if ($acta->estado != "CONRDR")
-                                                        <option value= "{{$acta->id}}">{{ $acta->numero}}</option>
-                                                    @endif
-                                                    @endif
-                                                @endforeach
-                                    </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="n_resolucion">Numero de Resolucion</label>
-                                    <input type="text" class="form-control" id="n_resolucion" name="n_resolucion" placeholder="Ingrese el N° de Resolucion" autocomplete="off" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="fecha">Fecha </label>
-                                    <input type="date" class="form-control" id="fecha" name="fecha" required>
-                                </div>
-
-
-                                <div class="form-group">
-                                    <label for="detalle">Detalle</label>
-                                    <input type="text" class="form-control" id="detalle" name="detalle" placeholder="Ingrese mas informacion sobre la resolucion" autocomplete="off">
-                                </div>
-
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" style = "background-color: #EC7518; color:white;">Cerrar</button>
-                            <button type="submit" class="btn btn-primary" style = "background-color: #229ed1; color:white;" >Guardar</button>
-                        </div>
-
-                        </form>
-
-                    </div>
-                </div>
-            </div>
-
-
-             <!-- Modal to EDIT -->
-            <div class="modal fade" id="myModalEdit" tabindex="-1" role="dialog" >
-                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-dialog-custom modal-xl" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header" style="background-color: rgb(36, 142, 243);">
-                            <h4 class="modal-title" id="myModalLabel"><b>EDITAR RESOLUCION</b></h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-
-                        <form action="" id="editarForm" method="POST">
-                        <div class="modal-body">
-                                @csrf
-
-                                <div class="form-group">
-                                    <div class="input-group mb-3">
-                                    <label for="">N° de Acta:</label>
-                                            <select name="acta" id="actaedit" name="acta" value=""
-                                                class="bg-white border border-gray-300 text-gray-900 text-sm rounded focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:focus:border-blue-500" required>
-                                                <option value="">Seleccione..</option>
-                                                @foreach ($actas as $acta)
-                                                    @if($acta->estado == "CONDESCARGO" || $acta->estado != "ARCHIVADO")
-                                                        @if ($acta->estado != "CONRDR")
-                                                            <option value= "{{$acta->id}}">{{ $acta->numero}}</option>
-                                                        @endif
-                                                    @endif
-                                                @endforeach
-                                            </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="n_resolucion">Numero de Resolucion</label>
-                                    <input type="text" class="form-control" id="n_resolucionedit" name="n_resolucion" placeholder="Ingrese el N° de Resolucion" autocomplete="off" required>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="fecha">Fecha </label>
-                                    <input type="date" class="form-control" id="fechaedit" name="fecha" required>
-                                </div>
-
-
-                                <div class="form-group">
-                                    <label for="detalle">Detalle</label>
-                                    <input type="text" class="form-control" id="detalleedit" name="detalle" placeholder="Ingrese mas informacion sobre la resolucion" autocomplete="off">
-                                </div>
-                        </div>
-
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal" style = "background-color: #EC7518; color:white;">Cerrar</button>
-                            <button type="submit" class="btn btn-primary" style = "background-color: #229ed1; color:white;" >Guardar</button>
-                        </div>
-
-                        </form>
-
-                    </div>
-                </div>
-        </div>
-
+    <!-- Botón o enlace que abre el modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#modalRegistrarResoluciones" style="background-color: #187BEC; margin: 10px 10px 10px -15px;">
+        Nueva Resolucion
+    </button>
 <div class="table-responsive">
     <table class="table" style="font-size: 75%; text-align: center;">
-
-        <!--CABECERA-->
         <thead class="thead-dark">
-                <tr>
-                    <th scope="col" rowspan="2" >N°</th>
-                    <th scope="col" rowspan="2" >EMPRESA DE TRANSPORTES</th>
-                    <th scope="col" colspan="4" class="borders_1">DATOS DEL ACTA</th>
-                    <th scope="col" colspan="3" class="borders_1">DATOS DEL CONDUCTOR</th>
-                    <th scope="col" rowspan="2" >NUMERO DE RESOLUCION</th>
-                    <th scope="col" rowspan="2" >FECHA DE RESOLUCION</th>
-                    <th scope="col" rowspan="2" >DETALLE</th>
-                    <th scope="col" rowspan="2" >ACCIONES</th>
-                </tr>
-                <tr>
-                    <th scope="col" class="borders_1" >N° DE ACTA</th>
-                    <th scope="col" class="borders_1" >FECHA DE ACTA</th>
-                    <th scope="col" class="borders_1" >LUGAR INTERVENCION</th>
-                    <th scope="col" class="borders_1" >PLACA VEHICULO</th>
-                    <th scope="col" class="borders_1" >NOMBRES</th>
-                    <th scope="col" class="borders_1" >APELLIDOS</th>
-                    <th scope="col" class="borders_1" >LICENCIA</th>
-                </tr>
+            <tr>
+                <th scope="col" rowspan="2" >N°</th>
+                <th scope="col" rowspan="2" >EMPRESA DE TRANSPORTES</th>
+                <th scope="col" colspan="4" class="borders_1">DATOS DEL ACTA</th>
+                <th scope="col" colspan="3" class="borders_1">DATOS DEL CONDUCTOR</th>
+                <th scope="col" rowspan="2" >NUMERO DE RESOLUCION</th>
+                <th scope="col" rowspan="2" >FECHA DE RESOLUCION</th>
+                <th scope="col" rowspan="2" >DETALLE</th>
+                <th scope="col" rowspan="2" >ACCIONES</th>
+            </tr>
+            <tr>
+                <th scope="col" class="borders_1" >N° DE ACTA</th>
+                <th scope="col" class="borders_1" >FECHA DE ACTA</th>
+                <th scope="col" class="borders_1" >LUGAR INTERVENCION</th>
+                <th scope="col" class="borders_1" >PLACA VEHICULO</th>
+                <th scope="col" class="borders_1" >NOMBRES</th>
+                <th scope="col" class="borders_1" >APELLIDOS</th>
+                <th scope="col" class="borders_1" >LICENCIA</th>
+            </tr>
         </thead>
 
-        @props(['resoluciones'])
-
         <tbody>
-
             @foreach($resoluciones as $index => $resolucion)
                     <tr>
                         <td>{{$index +1}}</td>
@@ -173,7 +44,7 @@
                         <td>{{$resolucion->fecha}}</td>
                         <td>{{$resolucion->detalle}}</td>
                         <td>
-                            <a class="btn btn-warning" data-toggle="modal" data-target="#myModalEdit" onclick="capturar({{ json_encode($resolucion->id) }},{{ json_encode($resolucion->acta->id) }},{{ json_encode($resolucion->n_resolucion) }},{{ json_encode($resolucion->fecha) }},{{ json_encode($resolucion->detalle) }})">
+                            <a class="btn btn-warning" data-toggle="modal" data-target="#modalEditarResoluciones" onclick="capturar({{ json_encode($resolucion->id) }},{{ json_encode($resolucion->acta->id) }},{{ json_encode($resolucion->n_resolucion) }},{{ json_encode($resolucion->fecha) }},{{ json_encode($resolucion->detalle) }})">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
                                 <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
                                 </svg>
@@ -213,5 +84,7 @@
            document.getElementById("n_resolucionedit").value = n_resolucion;
            document.getElementById("fechaedit").value = fecha;
            document.getElementById("detalleedit").value = detalle;
+
+           console.log(document.getElementById("actaedit").value = numero);
        }
 </script>

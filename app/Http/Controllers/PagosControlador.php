@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Pago;
 use App\Models\Acta;
+use App\Models\Uit;
 
 class PagosControlador extends Controller
 {
@@ -21,7 +22,9 @@ class PagosControlador extends Controller
 
         $actas = Acta::all();
 
-        return view('pagos', ['pagos' => $pagos_realizados, 'actas' => $actas]);
+        $uit = Uit::all();
+
+        return view('pagos', ['pagos' => $pagos_realizados, 'actas' => $actas, 'uit'=>$uit]);
     }
 
     /**
@@ -35,18 +38,20 @@ class PagosControlador extends Controller
 
         $cambia = Acta::findOrFail($request->input('acta'));
 
-        if($request->input('inputGroupSelect01') == "INFRACCION" || $request->input('inputGroupSelect01') == "SANCION")
+        if($request->input('inputGroupSelect01') == "infraccion")
         {
+            $cambia->estadoanterior=$cambia->estado;
             $cambia->estado = "ARCHIVADO";
             $cambia->save();
         }
-        else if($request->input('inputGroupSelect01') == "RDR"){
-            $cambia->estado = "ARCHIVADO";
+        else if($request->input('inputGroupSelect01') == "rdr"){
+            $cambia->estadoanterior=$cambia->estado;
+            $cambia->estado = "CONRDR";
             $cambia->save();
         }
-        else
+        else if($request->input('inputGroupSelect01') == "descargo")
         {
-            $cambia = Acta::findOrFail($request->input('acta'));
+            $cambia->estadoanterior=$cambia->estado;
             $cambia->estado = "CONDESCARGO";
             $cambia->save();
         }
@@ -90,18 +95,25 @@ class PagosControlador extends Controller
     {
         // Obtener el operativo a actualizar
         $nuevo_pago = Pago::findOrFail($id);
+        $nuevo_pago->tipo = $request->input('inputGroupSelect01');
         $cambia = Acta::findOrFail($request->input('acta'));
 
-        if($request->input('inputGroupSelect01') == "INFRACCION" || $request->input('inputGroupSelect01') == "SANCION")
+        if($request->input('inputGroupSelect01') == "infraccion")
         {
-            $cambia->estado = "ARCHIVADO";
-        }else if($request->input('inputGroupSelect01') == "RDR"){
+            $cambia->estadoanterior=$cambia->estado;
             $cambia->estado = "ARCHIVADO";
             $cambia->save();
         }
-        else
+        else if($request->input('inputGroupSelect01') == "rdr"){
+            $cambia->estadoanterior=$cambia->estado;
+            $cambia->estado = "CONRDR";
+            $cambia->save();
+        }
+        else if($request->input('inputGroupSelect01') == "descargo")
         {
+            $cambia->estadoanterior=$cambia->estado;
             $cambia->estado = "CONDESCARGO";
+            $cambia->save();
         }
 
         $cambia->save();
@@ -123,6 +135,13 @@ class PagosControlador extends Controller
     {
         $pago = Pago::findOrFail($id);
         $pago->delete();
+
+        $acta = $pago->acta;
+        $pago->delete();
+
+        $acta->estado =$acta->estadoanterior;
+        $acta->estadoanterior = 'REGISTRADO';
+        $acta->save();
 
         // Redireccionar a la página o realizar alguna acción adicional
         return redirect()->back();

@@ -13,9 +13,12 @@ return new class extends Migration
     {
         Schema::create('inspectors', function (Blueprint $table) {
             $table->id();
+            $table->char('acreditado',3);
             $table->string('nombres')->nullable(false);
             $table->string('apellidos')->nullable(false);
-            $table->string('telefono')->nullable(false);
+            $table->char('dni',8)->nullable(true);
+            $table->char('telefono','9')->nullable(true);
+            $table->char('rdrauto','4')->nullable(true);
             $table->timestamps();
         });
     }

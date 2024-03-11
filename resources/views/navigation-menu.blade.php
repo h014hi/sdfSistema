@@ -43,7 +43,7 @@
                         {{ __('Empresas') }}
                     </x-nav-link>
 
-                    <x-nav-link href="{{ route('home') }}" :active="request()->routeIs('grafico')">
+                    <x-nav-link href="{{ route('grafico') }}" :active="request()->routeIs('grafico')">
                         {{ __('Reportes') }}
                     </x-nav-link>
 
@@ -58,9 +58,6 @@
 
 
             <div class="hidden sm:flex sm:items-center sm:ml-6">
-                @if(request()->routeIs('grafico'))
-                    <x-reportepdf></x-reportepdf>
-                @endif
                 <!-- Teams Dropdown -->
                 @if (Laravel\Jetstream\Jetstream::hasTeamFeatures())
                     <div class="ml-3 relative">
